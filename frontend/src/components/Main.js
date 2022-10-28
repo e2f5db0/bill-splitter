@@ -22,7 +22,7 @@ const Main = () => {
 
   return (
     <div className='Container'>
-      <h1>Bill splitter</h1>
+      <h1>React Node Template</h1>
       <p>A good starting point for any React app – containerized edition</p>
       <h3>Current Examples in the mongo database:</h3>
       <ExampleList examples={examples} deleteExample={deleteExample} />

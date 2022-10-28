@@ -1,16 +1,18 @@
-require('dotenv').config()
-
 /* eslint-disable no-undef */
-db.createUser({
-  user: process.env.DB_USER,
-  pwd: process.env.DB_PASSWORD,
-  roles: [
-    {
-      role: 'dbOwner',
-      db: process.env.DB_NAME,
-    },
-  ],
-})
+try {
+  db.createUser({
+    user: 'the_user',
+    pwd: 'the_password',
+    roles: [
+      {
+        role: 'dbOwner',
+        db: 'the_database',
+      },
+    ],
+  })
+} catch (e) {
+  console.log('Error: db user not created: ', e)
+}
 
 db.createCollection('examples')
 
