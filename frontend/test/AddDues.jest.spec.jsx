@@ -1,16 +1,16 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import Main from '../src/components/Main'
+import AddDues from '../src/components/AddDues'
 import '@testing-library/jest-dom/extend-expect'
 
-describe('<Main />', () => {
-  it('can be rendered', () => {
+describe('<AddDues />', () => {
+  it('should display text', () => {
     render(
       <BrowserRouter>
-        <Main />
+        <AddDues />
       </BrowserRouter>
     )
-    expect(screen.getByText('Maksa')).toBeVisible()
+    expect(screen.getByText('Pyydä')).toBeVisible()
   })
 })

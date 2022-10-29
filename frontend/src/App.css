@@ -1,189 +1,431 @@
 /* Global styles */
 
 html {
-  background-color: gainsboro;
+  background-color: #151515;
 }
 
 @font-face {
-  src: url('./fonts/AdventPro-Light.ttf');
-  font-family: AdventPro;
+  src: url('./fonts/Roboto-Light.ttf');
+  font-family: Roboto;
+}
+
+h1 {
+  margin-top: .5em;
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+h3 {
+  margin-bottom: .3em;
+  margin-top: 0;
 }
 
 .App {
   text-align: center;
-  font-family: AdventPro;
+  font-family: Roboto;
+  color: #B4A5A5;
 }
 
 .Container {
   margin: auto;
   width: 90%;
   font-size: calc(3px + 2vmin);
-}
-
-.Container-flex {
   display: flex;
-  flex-wrap: wrap;
-}
-
-p {
-  margin: .5em;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1em;
 }
 
 .Navbar {
-  margin-top: 3%;
-  margin: auto;
+  margin-top: 2em;
   width: 100%;
   height: 5em;
   position: relative;
-  background-color: #253532;
-}
-
-.Navbar-logo {
-  vertical-align: middle;
-  height: 4em;
-  cursor: pointer;
-}
-
-.NavBar-heading {
-  margin-left: .5em;
-  color: gainsboro;
   font-size: larger;
-  vertical-align: middle;
+  margin-bottom: 1em;
+}
+
+.Heading {
   cursor: pointer;
 }
 
-.Navbar-navigation {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  padding: 0 1rem;
+.Debt-dashboard {
+  width: 30em;
+  padding: 1em;
+  border: solid 2px darkgray;
+  border-radius: 1em;
+  margin-bottom: 1em;
 }
 
-.Navbar-item {
-  color: gainsboro;
-  text-decoration: none;
-  display: inline-block;
-  padding: 1rem;
-}
-
-.Navbar-item:hover,
-.Navbar-item:active {
-  color: white;
-  cursor: pointer;
-}
-
-.Navbar-items ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-
-.Navbar-spacer {
-  flex: 1;
-}
-
-.Toggle-Button {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 30px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.Toggle-Button:focus {
-  outline: none;
-}
-
-.Toggle-Button-line {
-  width: 40px;
-  height: 3px;
-  background: gainsboro;
-}
-
-.Button {
+.Debt-dashboard-separator {
   margin-top: 1em;
-  width: 5em;
-  height: 3em;
-  border: none;
-  background-color: black;
-  color: #d1ebff;
-  font-size: 1rem;
+  border-bottom: solid 1px darkgray;
+  width: 30em;
 }
 
-.Button:hover {
-  transform: scale(1.05);
-}
-
-.Input {
-  height: 3em;
-  width: 33em;
-  margin-top: 1em;
-  font-size: medium;
-  padding: .3em;
-}
-
-.ExampleForm {
-  margin-top: 2em;
-}
-
-.Backdrop {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 100;
-}
-
-.Side-Drawer {
-  height: 100vh;
-  background-color: #181A1B;
-  box-shadow: 2px 0px 7px rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 70%;
-  max-width: 400px;
-  z-index: 200;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-out;
-}
-
-.Side-Drawer.open {
-  transform: translateX(0);
-}
-
-.Side-Drawer ul {
-  height: 100%;
-  list-style: none;
+.Debt-dashboard-list {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
-.Side-Drawer-item {
+.Debt-dashboard-row {
+  display: flex;
+  border-bottom: solid 1px grey;
+  width: 12em;
+  justify-content: center;
+  align-items: center;
+}
+
+.Debt-dashboard-item-left {
+  width: 45%;
+  text-align: right;
+  margin-right: 1em;
+}
+
+.Debt-dashboard-item-right {
+  width: 30%;
   text-align: left;
-  color: gainsboro;
-  text-decoration: none;
-  display: inline-block;
+}
+
+.Login-name-container {
+  padding: .5em;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  font-size: 1.4rem;
+  background-color: #3C415C;
+  width: 50%;
+}
+
+.Login-name-container:hover {
+  transform: scale(1.02);
   cursor: pointer;
-  font-size: calc(15px + 1vmin);
-  padding: 1rem;
 }
 
-.Side-Drawer-item:hover, 
-.Side-Drawer-item:active {
-  color: white;
+.Main-button {
+  padding: .5em;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  font-size: 2rem;
+  background-color: #3C415C;
+  width: 50%;
 }
 
-.Side-Drawer li {
-  margin: 0.5rem 0;
+.Main-button:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+.Payment-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px darkgray;
+  border-radius: 1em;
+  padding: 1em;
+  padding-bottom: 2em;
+  width: 90%;
+}
+
+.Payment-user-selection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 90%;
+  flex-wrap: wrap;
+}
+
+.Payment-user-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5em;
+  height: 2em;
+  border-radius: 1em;
+  padding: 1em;
+  background-color: #3C415C;
+}
+
+.Payment-message-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Payment-message-list p {
+  margin: 0;
+}
+
+.AddDue-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px darkgray;
+  border-radius: 1em;
+  padding: 1em;
+  padding-bottom: 2em;
+  width: 90%;
+}
+
+.AddDue-user-selection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 90%;
+  flex-wrap: wrap;
+}
+
+.AddDue-user-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5em;
+  height: 2em;
+  border-radius: 1em;
+  padding: 1em;
+  background-color: #3C415C;
+}
+
+.AddDue-user-item:hover {
+  background-color: #301B3F;
+  cursor: pointer;
+}
+
+.AddDue-inputs {
+  display: flex;
+  margin-top: 1em;
+  width: 90%;
+  justify-content: space-between;
+}
+
+.Input-field-amount {
+  background-color: #3C415C;
+  width: 20%;
+  border: none;
+  height: 2em;
+  border-radius: .1em;
+  font-size: 2rem;
+  color: #B4A5A5;
+  padding: .2em;
+  margin-right: 1em;
+  text-align: center;
+}
+
+.Input-field-message {
+  background-color: #3C415C;
+  width: 80%;
+  border: none;
+  height: 2em;
+  border-radius: .1em;
+  font-size: 2rem;
+  color: #B4A5A5;
+  padding: .2em;
+  text-align: center;
+}
+
+.btn {
+  background-color: #3C415C;
+  width: 5em;
+  height: 3em;
+  border: none;
+  border-radius: .1em;
+  color: #B4A5A5;
+  font-size: 1.5rem;
+  margin-bottom: 1em;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.Add-btn {
+  margin-bottom: 0;
+  margin-top: 1.5em;
+  width: 6em;
+  height: 4em;
+  font-size: larger;
+  cursor: pointer;
+}
+
+.Selected {
+  background-color: #301B3F;
+  border: 2px solid #301B3F;
+}
+
+.Daily-k-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: .5em;
+}
+
+.Daily-k {
+  margin: 0;
+}
+
+.Spin-icon {
+  width: 1.5em;
+  margin-left: .5em;
+  cursor: pointer;
+}
+
+.Rotate {
+  animation: spin .3s ease-out;
+}
+
+.Spin-icon:hover {
+  transform: scale(1.1);
+}
+
+.Half-circle-large {
+  width: 4em;
+  height: 2em; /* as the half of the width */
+  border-top-left-radius: 110px;  /* 100px of height + 10px of border */
+  border-top-right-radius: 110px; /* 100px of height + 10px of border */
+  border: 10px solid #301B3F;
+  border-bottom: 0;
+  animation: spin .5s infinite linear;
+  transform-origin: 50% 100%;
+}
+
+.Half-circle-small {
+  width: 4em;
+  height: 2em; /* as the half of the width */
+  border-top-left-radius: 110px;  /* 100px of height + 10px of border */
+  border-top-right-radius: 110px; /* 100px of height + 10px of border */
+  border: 10px solid #301B3F;
+  border-bottom: 0;
+  animation: spin-cc .5s infinite linear;
+  transform-origin: 50% 100%;
+}
+
+.Loading-animation-container {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 6em;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-cc {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.3);
+  }
+  20% {
+    transform: scale(0.7);
+  }
+  30% {
+    transform: scale(1.3);
+  }
+  40% {
+    transform: scale(0.7);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  60% {
+    transform: scale(0.7);
+  }
+  70% {
+    transform: scale(1.3);
+  }
+  80% {
+    transform: scale(0.7);
+  }
+  90% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #3C415C;
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  margin: 10% auto;
+  box-shadow: inset 0px 0px 0px #301B3F;
+  animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #301B3F;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(365deg);
+  }
 }
 
 @media (max-width: 900px) {
@@ -203,9 +445,84 @@ p {
   cursor: pointer;
 }
 
-@media(max-width: 447px) {
+@media(max-width: 1220px) {
+  .Navbar {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: medium;
+  }
   .Container {
-    margin-top: 1.5em;
+    margin-top: 1em;
     font-size: large;
+  }
+  .Container h1 {
+    margin-top: 0;
+    margin-bottom: .4em;
+  }
+  .Container h4 {
+    margin-top: .5em;
+    margin-bottom: .4em;
+  }
+  .Debt-dashboard {
+    padding: .7em;
+    width: 90%;
+    font-size: 1.5rem;
+  }
+  .Debt-dashboard p {
+    margin: .5em;
+    padding-bottom: .5em;
+  }
+  .Debt-dashboard h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: .5em;
+  }
+  .Debt-dashboard Label {
+    margin-top: 0;
+  }
+  .Debt-dashboard-separator {
+    width: 100%
+  }
+  .Main-button {
+    display: flex;
+    height: 2em;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .AddDue-container h2 {
+    margin-top: 0;
+  }
+  .AddDue-user-selection {
+    justify-content: space-evenly;
+  }
+  .AddDue-user-item {
+    width: 30%;
+  }
+  .AddDue-inputs{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: .5em;
+  }
+  .Input-field-amount {
+    height: 3em;
+    width: 90%;
+    margin-right: 0;
+    font-size: 1rem;
+    margin-bottom: .5em;
+  }
+  .Input-field-message {
+    margin-top: .5em;
+    height: 2.5em;
+    width: 90%;
+    font-size: 1rem;
+  }
+  .Add-btn {
+    margin-top: 1em;
+    height: 3em;
+  }
+  .Error {
+    border: 1px solid red;
   }
 }

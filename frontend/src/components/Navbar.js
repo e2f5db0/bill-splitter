@@ -1,37 +1,33 @@
 import React, { useState } from 'react'
-import logo from '../resources/logo.jpg'
-import DrawerToggleButton from './DrawerToggleButton'
-import SideDrawer from './SideDrawer'
-import Backdrop from './Backdrop'
+import sanat from '../resources/k-sanalista.js'
+import spin from '../resources/spin-icon.png'
+import classNames from 'classnames'
 
-const Navbar = ({ setBody }) => {
+const Navbar = (props) => {
 
-  const [drawerOpen, setDrawerOpen] = useState(false)
-
-  const toggleDrawer = () => {
-    drawerOpen ? setDrawerOpen(false) : setDrawerOpen(true)
+  const randomKWord = () => {
+    const rand = Math.floor(Math.random() * (sanat.length - 1))
+    const randK = sanat[rand]
+    return randK
   }
 
+  const rotation = () => {
+    setRotate(true)
+    setTimeout(() => {
+      setRotate(false)
+    }, 1000)
+  }
+
+  const [rotate, setRotate] = useState(false)
+  const [dailyK, setDailyK] = useState(randomKWord())
+
   return (
-    <div>
-      <header className='Navbar'>
-        <nav className='Navbar-navigation'>
-          <div className='Navbar-navigation'>
-            <DrawerToggleButton toggleDrawer={toggleDrawer} />
-          </div>
-          <img className='Navbar-logo' src={logo} alt='logo' onClick={() => setBody('main')} />
-          <p className='NavBar-heading' onClick={() => setBody('main')}>React Node Template</p>
-          <div className='Navbar-spacer'></div>
-          <div className='Navbar-items'>
-            <ul>
-              <li id='firstOption' className='Navbar-item' onClick={() => setBody('firstOption')}>First Option</li>
-              <li id='secondOption' className='Navbar-item' onClick={() => setBody('secondOption')}>Second Option</li>
-            </ul>
-          </div>
-        </nav>
-      </header>
-      <SideDrawer show={drawerOpen} toggleDrawer={toggleDrawer} setBody={setBody} />
-      {drawerOpen && <Backdrop toggleDrawer={toggleDrawer} />}
+    <div className='Navbar'>
+      <h1 className='Heading' onClick={() => props.setView('main')}>KommuuniApp</h1>
+      <div className='Daily-k-container'>
+        <h3 className='Daily-k'>– kommuunin {dailyK}</h3>
+        <img className={classNames({ 'Spin-icon': !rotate }, { 'Spin-icon Rotate': rotate })} src={spin} onClick={() => { rotation(); setDailyK(randomKWord()) }} alt='spin-icon.png' />
+      </div>
     </div>
   )
 }

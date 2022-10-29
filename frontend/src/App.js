@@ -1,50 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import { Switch, Route, useHistory } from 'react-router-dom'
-import Navbar from './components/Navbar'
+import Login from './components/Login'
 import Main from './components/Main'
-import FirstOption from './components/FirstOption'
-import SecondOption from './components/SecondOption'
+import AddDues from './components/AddDues'
+import Pay from './components/Pay'
+import Navbar from './components/Navbar'
 
 const App = () => {
 
-  const history = useHistory()
+    const [memberCount, setMemberCount] = useState(0)
+    const [user, setUser] = useState(undefined)
 
-  const setView = (view) => {
-    history.push(`/${view}`)
-  }
+    const history = useHistory()
 
-  const views = {}
+    const setView = (view) => {
+        history.push(`/${view}`)
+    }
 
-  views['main'] = <Main />
+    const views = {}
 
-  views['firstOption'] = <FirstOption />
+    views['login'] = <Login setMemberCount={setMemberCount} setUser={setUser} />
 
-  views['secondOption'] = <SecondOption />
+    views['main'] = <Main user={user} setView={setView} />
 
-  return (
-    <div className="App">
-      <Navbar setBody={setView} />
-      <Switch>
-        <Route exact path='/'>
-          {views['main']}
-        </Route>
+    views['addDues'] = <AddDues user={user} setView={setView} />
 
-        <Route exact path='/main'>
-          {views['main']}
-        </Route>
+    views['pay'] = <Pay user={user} setView={setView} memberCount={memberCount} />
 
-        <Route exact path='/firstOption'>
-          {views['firstOption']}
-        </Route>
 
-        <Route exact path='/secondOption'>
-          {views['secondOption']}
-        </Route>
+    return (
+        <div className="App">
+            <Navbar setView={setView} />
+            <Switch>
+                <Route exact path='/'>
+                    {user ? views['main'] : views['login']}
+                </Route>
 
-      </Switch>
-    </div>
-  )
+                <Route exact path='/main'>
+                    {user ? views['main'] : views['login']}
+                </Route>
+
+                <Route exact path='/addDues'>
+                    {user ? views['addDues'] : views['login']}
+                </Route>
+
+                <Route exact path='/pay'>
+                    {user ? views['pay'] : views['login']}
+                </Route>
+            </Switch>
+        </div>
+    )
 
 }
 

@@ -1,16 +1,16 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import FirstOption from '../src/components/FirstOption'
+import Pay from '../src/components/Pay'
 import '@testing-library/jest-dom/extend-expect'
 
-describe('<FirstOption />', () => {
+describe('<Pay />', () => {
   it('should display text', () => {
     render(
       <BrowserRouter>
-        <FirstOption />
+        <Pay />
       </BrowserRouter>
     )
-    expect(screen.getByText('First Option')).toBeVisible()
+    expect(screen.getByText('Velat yhteensä:')).toBeVisible()
   })
 })
