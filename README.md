@@ -2,11 +2,6 @@
 
 A containerized starting point for a react node web application using mongoDB.
 
-## Todo
-
-- Figure out the database setup after deployment (MongoDB)
-- Figure out how to deploy the whole containerized setup to Heroku with the github actions pipeline (One dyno for each Dockerfile? How will the containers communicate without docker-compose?)
-
 ## Development
 
 Clone the repository
@@ -41,7 +36,7 @@ MONGO_URL=mongodb://<DB_USER>:<DB_PASSWORD>@template-mongo:27017/<DB_NAME>
 
 ```
 
-Now change the credentials in [mongo-init.js](https://github.com/e2f5db0/bill-splitter/blob/master/backend/mongo/mongo-init.js) to match the .env file. mongo-init.js cannot utilize dotenv, unfortunately.
+Now change the credentials in [mongo-init.js](https://github.com/e2f5db0/bill-splitter/blob/master/backend/mongo/mongo-init.js) to match the *.env* file. *mongo-init.js* cannot utilize dotenv, unfortunately.
 
 `Note:` Do NOT push your credentials in *mongo-init.js* to github! You can for example add *mongo-init.js* to *.gitignore* after you have changed the credentials.
 

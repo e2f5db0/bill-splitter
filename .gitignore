@@ -30,4 +30,4 @@ yarn-error.log*
 .env
 
 # includes credentials
-mongo-init.js
+backend/mongo/mongo-init.js
