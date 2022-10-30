@@ -5,8 +5,8 @@ router.get('/', (req, res) => {
   res.status(200).send('Backend running...')
 })
 
-router.get('/health', (req, res) => {
-  res.send('ok')
+router.get('/ping', (req, res) => {
+  res.send('pong')
 })
 
 module.exports = router

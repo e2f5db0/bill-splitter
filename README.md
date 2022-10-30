@@ -58,6 +58,15 @@ In the root folder:
 
 `Note:` You may have to type sudo in front of the *docker-compose* and *docker* commands.
 
+`Debug:` If changes do not trigger nodemon live-reload, try to add -L (--legacy-watch) flag to dev script in *package.json*:
+
+```
+"dev": "nodemon -L index.js"`Debug:` If changes do not trigger nodemon live-reload, try to add -L (--legacy-watch) flag to dev script in *package.json*:
+
+```
+"dev 
+```
+
 ### Linting
 
 Make sure to lint the code before trying to make PRs and fix all lint issues

@@ -6,13 +6,13 @@ var bodyParser = require('body-parser')
 const app = express()
 
 const indexRouter = require('./routes/index')
-const examplesRouter = require('./routes/examples')
+const usersRouter = require('./routes/users')
 
 app.use(cors())
 app.use(bodyParser.json())
 
 app.use('/', indexRouter)
-app.use('/examples', examplesRouter)
+app.use('/users', usersRouter)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
