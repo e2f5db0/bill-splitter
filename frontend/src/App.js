@@ -9,49 +9,46 @@ import Navbar from './components/Navbar'
 
 const App = () => {
 
-    const [memberCount, setMemberCount] = useState(0)
-    const [user, setUser] = useState(undefined)
+  const [user, setUser] = useState('')
 
-    const history = useHistory()
+  const history = useHistory()
 
-    const setView = (view) => {
-        history.push(`/${view}`)
-    }
+  const setView = (view) => {
+    history.push(`/${view}`)
+  }
 
-    const views = {}
+  const views = {}
 
-    views['login'] = <Login setMemberCount={setMemberCount} setUser={setUser} />
+  views['login'] = <Login setUser={setUser} />
 
-    views['main'] = <Main user={user} setView={setView} />
+  views['main'] = <Main user={user} setView={setView} />
 
-    views['addDues'] = <AddDues user={user} setView={setView} />
+  views['addDues'] = <AddDues user={user} setView={setView} />
 
-    views['pay'] = <Pay user={user} setView={setView} memberCount={memberCount} />
+  views['pay'] = <Pay user={user} setView={setView} />
 
+  return (
+    <div className="App">
+      <Navbar setView={setView} />
+      <Switch>
+        <Route exact path='/'>
+          {user ? views['main'] : views['login']}
+        </Route>
 
-    return (
-        <div className="App">
-            <Navbar setView={setView} />
-            <Switch>
-                <Route exact path='/'>
-                    {user ? views['main'] : views['login']}
-                </Route>
+        <Route exact path='/main'>
+          {user ? views['main'] : views['login']}
+        </Route>
 
-                <Route exact path='/main'>
-                    {user ? views['main'] : views['login']}
-                </Route>
+        <Route exact path='/addDues'>
+          {user ? views['addDues'] : views['login']}
+        </Route>
 
-                <Route exact path='/addDues'>
-                    {user ? views['addDues'] : views['login']}
-                </Route>
-
-                <Route exact path='/pay'>
-                    {user ? views['pay'] : views['login']}
-                </Route>
-            </Switch>
-        </div>
-    )
-
+        <Route exact path='/pay'>
+          {user ? views['pay'] : views['login']}
+        </Route>
+      </Switch>
+    </div>
+  )
 }
 
 export default App

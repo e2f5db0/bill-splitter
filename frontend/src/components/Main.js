@@ -1,75 +1,52 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const Main = (props) => {
-
-  const hardCodedDebts = [
-    {
-      id: 1,
-      receiver: 'Sammakko',
-      totalAmount: 3,
-      messages: ['Tippabisse', 'Patukka']
-    },
-    {
-      id: 2,
-      receiver: 'Susi',
-      totalAmount: 10,
-      messages: ['Sähkölasku']
+  
+  const [userDebts, setUserDebts] = useState([])
+  const [userDues, setUserDues] = useState([])
+  
+  useEffect(() => {
+    async function fetchDebts() {
+      const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)
+      setUserDebts(res.data)
     }
-  ]
-
-  const hardCodedDues = [
-    {
-      id: 1,
-      user: 'Karibu',
-      totalAmount: 10,
-      messages: ['Tippabisse', 'Patukka']
-    },
-    {
-      id: 2,
-      user: 'Lepakko',
-      totalAmount: 10,
-      messages: ['Tippabisse', 'Patukka']
+    async function fetchDues() {
+      const res = await axios.get(`http://127.0.0.1:3001/debts/dues/${props.user}`)
+      setUserDues(res.data)
     }
-  ]
-
-  const fetchDebts = (user) => {
-    // TBA fetch debts for the current user
-  }
-
-  const fetchDues = (user) => {
-    // TBA fetch dues for the current user
-  }
-
-  const [userDebts, setUserDebts] = useState(hardCodedDebts)
+    fetchDebts()
+    fetchDues()
+  }, [])
 
   return (
     <div className='Container'>
       <h1>{props.user} </h1>
       <div className='Debt-dashboard'>
-        <h4>Velat:</h4>
+        <h4>Maksettava:</h4>
         <div className='Debt-dashboard-list'>
-          {hardCodedDebts.length > 0 ? hardCodedDebts.map(debt => {
+          {userDebts.length > 0 ? userDebts.map(debt => {
             return (
-              <div key={debt.id} className='Debt-dashboard-row'>
-                <small className='Debt-dashboard-item-left'>{debt.receiver}: </small>
+              <div key={debt._id} className='Debt-dashboard-row'>
+                <small className='Debt-dashboard-item-left'>{debt.requester}: </small>
                 <b className='Debt-dashboard-item-right'><small>{debt.totalAmount}€</small></b>
               </div>
             )
-          }) : <small>Ei velkoja.</small>}
+          }) : <small>0 €</small>}
         </div>
       </div>
       <div className='Debt-dashboard'>
         <h4>Saamatta:</h4>
         <div className='Debt-dashboard-list'>
-          {hardCodedDues.length > 0 ? hardCodedDues.map(due => {
+          {userDues.length > 0 ? userDues.map(due => {
             return (
-              <div key={due.id} className='Debt-dashboard-row'>
-                <small className='Debt-dashboard-item-left'>{due.user}: </small>
+              <div key={due._id} className='Debt-dashboard-row'>
+                {console.log(due)}
+                <small className='Debt-dashboard-item-left'>{due.payer}: </small>
                 <b className='Debt-dashboard-item-right'><small>{due.totalAmount}€</small></b>
               </div>
             )
-          }) : <small>Ei velkoja.</small>}
+          }) : <small>0 €</small>}
         </div>
       </div>
       <div className='Main-button' onClick={() => props.setView('addDues')}>
