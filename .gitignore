@@ -31,3 +31,6 @@ yarn-error.log*
 
 # includes credentials
 backend/mongo/mongo-init.js
+
+#formatter
+.prettierrc
