@@ -15,11 +15,13 @@ const Login = (props) => {
 
   return (
     <div className='Container'>
-      {users.map(user => 
-        <div key={user._id} className='Login-name-container' onClick={() => props.setUser(user.name)}>
-          <p>{user.name}</p>
-        </div>
-      )}
+      <div className='Login-container'>
+        {users.map(user =>
+          <div key={user._id} className='Login-name-container' onClick={() => props.setUser(user.name)}>
+            <p>{user.name}</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

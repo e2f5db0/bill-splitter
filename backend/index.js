@@ -11,6 +11,7 @@ const debtsRouter = require('./routes/debts')
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(express.json())
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)

@@ -2,87 +2,64 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 
-const querystring = require('querystring')
-
 const Pay = (props) => {
 
-  // TBA use values from database
-  // users to which the current user needs to pay
-  const hardcodedDebts = [
-    {
-      id: 1,
-      name: 'Susi',
-      totalAmount: 10,
-      messages: [
-        {
-          id: 1,
-          message: 'sähkölasku'
-        },
-        {
-          id: 2,
-          message: 'pepe'
-        },
-      ]
-    },
-    {
-      id: 2,
-      name: 'Sammakko',
-      totalAmount: 3,
-      messages: [
-        {
-          id: 3,
-          message: 'patukka'
-        },
-        {
-          id: 4,
-          message: 'kauppa'
-        }
-      ]
-    }
-  ]
-
-  const [users, setUsers] = useState(hardcodedDebts)
+  const [debts, setDebts] = useState([])
   const [selected, setSelected] = useState('')
   const [paymentSent, setPaymentSent] = useState(false)
   const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [totalAmount, setTotalAmount] = useState('')
   const [messages, setMessages] = useState([])
-  const [fetchedOnce, setFetchedOnce] = useState(false)
+  const [showMessages, setShowMessages] = useState(false)
 
-  const url = process.env.REACT_APP_DATABASE_URL
+  useEffect(() => {
+    async function fetchDebts() {
+      const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)
+      setDebts(res.data)
+      // preselect if there is only one requester
+      if (res.data.length === 1) {
+        const debt = res.data[0]
+        setSelected(debt.requester)
+        setTotalAmount(debt.totalAmount)
+        setMessages(debt.messages)
+      }
+    }
+    fetchDebts()
+  }, [])
 
-  const fetchUsers = () => axios.get(`${url}/users`).then((res) => setUsers(res.data)).catch(error => console.log(error))
-
-  //useEffect(() => {
-  //    if (!fetchedOnce) {
-  //        fetchTopics()
-  //    }
-  //    setInterval(() => {
-  //        fetchUsers()
-  //        setFetchedOnce(true)
-  //    }, 2000)
-  //}, [])
-
-  const pay = async (id) => {
+  const pay = async () => {
     if (selected.length === 0) {
       setError(true)
       return
     } else {
       setError(false)
     }
-    //await axios.post(`${url}/pay/${id}`, querystring.stringify({ user: props.user }))
-    setPaymentSent(true)
+    try {
+      const res = await axios.post(`http://127.0.0.1:3001/debts/pay`, {
+        payer: props.user,
+        requester: selected
+      })
+      if (res.status === 200) {
+        setPaymentSent(true)
+        setErrorMessage('')
+      }
+    } catch (e) {
+      setErrorMessage(`Error: ${e.message}`)
+    }
   }
 
   const handleSelection = (username) => {
+    setShowMessages(false)
     if (selected === username) {
       setSelected('')
+      setErrorMessage('')
     } else {
       setSelected(username)
       // show debt details for the selected user
-      const user = users.filter(u => u.name === username)[0]
-      setTotalAmount(user.totalAmount)
-      setMessages(user.messages)
+      const debt = debts.filter(debt => debt.requester === username)[0]
+      setTotalAmount(debt.totalAmount)
+      setMessages(debt.messages)
     }
   }
 
@@ -93,29 +70,28 @@ const Pay = (props) => {
 
   return (
     <div className='Container'>
-      <h2>Maksa</h2>
       <div className='Payment-container'>
-        {users.length && <div className='Payment-user-selection'>
-          {users.length > 0 && users.map(user => <p key={user.name} className={classNames({ 'Payment-user-item': !selected.includes(user.name) }, { 'AddDue-user-item Selected': selected.includes(user.name) })} onClick={() => handleSelection(user.name)}>{user.name}</p>)}
+        <h2>Maksa</h2>
+        {debts.length > 0 && <div className='Payment-user-selection'>
+          {debts.length > 0 && debts.map(debt => <p key={debt.requester} className={classNames({ 'Payment-user-item': selected !== debt.requester }, { 'Payment-user-item Selected': selected === debt.requester })} onClick={() => handleSelection(debt.requester)}>{debt.requester}</p>)}
         </div>}
-        {!users.length &&
-          <div className='Loading-animation-container'>
-            <div className='Half-circle-large'></div><div className='Half-circle-small'></div>
-          </div>
-        }
         <div>
-          <p>Velat yhteensä:</p>
-          {totalAmount && <h2>{totalAmount}€</h2>}
-          {!totalAmount && <h2>- €</h2>}
-          <div className='Payment-message-list'>
-            {messages.map(m => <p className='Debt-dashboard-item-right'>{m.message}</p>)}
-          </div>
+          <p>Velat:</p>
+          {selected && <h2>{totalAmount}€</h2>}
+          {!selected && <h2>- €</h2>}
+          {showMessages && <div className='Payment-message-list'>
+            {messages.map(message => <p key={message}>{message}</p>)}
+          </div>}
+          {(!showMessages && selected !== '') && <div className='Payment-messages-button' onClick={() => setShowMessages(true)}>
+            <p>Näytä viestit</p>
+          </div>}
         </div>
       </div>
-      {!paymentSent && <button className={classNames({ 'btn Add-btn': !error }, { 'btn Add-btn Error': error })} onClick={async () => await pay()}>Maksa</button>}
-      {paymentSent && <svg onClick={() => clearSelection()} class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+      {(!paymentSent && selected) && <button className={classNames({ 'btn Pay-btn': !error }, { 'btn Pay-btn Error': error })} onClick={async () => await pay()}>Maksa</button>}
+      {errorMessage && <p>{errorMessage}</p>}
+      {paymentSent && <svg onClick={() => clearSelection()} className='checkmark' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle className='checkmark__circle' cx="26" cy="26" r="25" fill="none" />
+        <path className='checkmark__check' fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
       </svg>}
     </div>
   )

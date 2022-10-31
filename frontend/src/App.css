@@ -91,6 +91,16 @@ h3 {
   text-align: left;
 }
 
+.Login-container {
+  margin: auto;
+  width: 90%;
+  font-size: calc(3px + 2vmin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2.5em;
+}
+
 .Login-name-container {
   padding: .5em;
   margin-bottom: 1em;
@@ -131,6 +141,10 @@ h3 {
   width: 90%;
 }
 
+.Payment-container h2 {
+  margin-top: 0;
+}
+
 .Payment-user-selection {
   display: flex;
   flex-direction: row;
@@ -148,13 +162,39 @@ h3 {
   border-radius: 1em;
   padding: 1em;
   background-color: #3C415C;
+  border: 1px solid #3C415C;
+}
+
+.Payment-user-item:hover {
+  cursor: pointer;
+  background-color: #301B3F;
+}
+
+.Payment-messages-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3em;
+  height: 1.5em;
+  border-radius: 1em;
+  padding: 1em;
+  margin-top: 1em;
+  background-color: #3C415C;
+  margin-left: 1em;
+  font-size: 1rem;
+}
+
+.Payment-messages-button:hover {
+  cursor: pointer;
+  background-color: #301B3F;
 }
 
 .Payment-message-list {
+  margin-top: .5em;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: left;
 }
 
 .Payment-message-list p {
@@ -190,6 +230,7 @@ h3 {
   border-radius: 1em;
   padding: 1em;
   background-color: #3C415C;
+  border: 1px solid #3C415C;
 }
 
 .AddDue-user-item:hover {
@@ -234,7 +275,7 @@ h3 {
   width: 5em;
   height: 3em;
   border: none;
-  border-radius: .1em;
+  border-radius: 1em;
   color: #B4A5A5;
   font-size: 1.5rem;
   margin-bottom: 1em;
@@ -251,12 +292,19 @@ h3 {
   width: 6em;
   height: 4em;
   font-size: larger;
-  cursor: pointer;
+}
+
+.Pay-btn {
+  margin-bottom: 0;
+  margin-top: 2em;
+  width: 6em;
+  height: 4em;
+  font-size: larger;
 }
 
 .Selected {
   background-color: #301B3F;
-  border: 2px solid #301B3F;
+  border: 1px solid gainsboro;
 }
 
 .Daily-k-container {
@@ -381,6 +429,7 @@ h3 {
 }
 
 .checkmark {
+  margin-top: 1em;
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -388,7 +437,6 @@ h3 {
   stroke-width: 2;
   stroke: #fff;
   stroke-miterlimit: 10;
-  margin: 10% auto;
   box-shadow: inset 0px 0px 0px #301B3F;
   animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
 }
@@ -519,6 +567,11 @@ h3 {
     font-size: 1rem;
   }
   .Add-btn {
+    margin-top: .5em;
+    margin-bottom: 1em;
+    height: 3em;
+  }
+  .Pay-btn {
     margin-top: 1em;
     height: 3em;
   }

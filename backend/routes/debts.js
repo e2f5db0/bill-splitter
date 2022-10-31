@@ -63,6 +63,61 @@ router.get('/dues/:requester', async (req, res) => {
   res.send(aggregatedDues)
 })
 
+/* POST add due(s) */
+// TBA optimization algorithm
+router.post('/addDue', async (req, res) => {
+  const { requester, payers, amount, message } = req.body
+  // add debts to all users
+  if (payers[0] === 'Kaikki') {
+    try {
+      const users = await User.find({})
+      const amountPerUser = amount / users.length
+      users.forEach((user) => {
+        // skip the requester
+        if (user.name === requester) return
+        Debt.create({
+          requester: requester,
+          payer: user.name,
+          amount: amountPerUser,
+          message: `- ${message}`
+        })
+      })
+      res.status(200).send('Due(s) added.')
+    } catch (e) {
+      res.status(400).send(`Error: ${e.message}`)
+    }
+  // add debts to selected users only
+  } else {
+    try {
+      const amountPerUser = amount / payers.length
+      await payers.forEach(payer => {
+        // skip the requester
+        if (payer === requester) return
+        Debt.create({
+          requester: requester,
+          payer: payer,
+          amount: amountPerUser,
+          message: `- ${message}`
+        })
+      })
+      res.status(200).send('Due(s) added.')
+    } catch (e) {
+      res.status(400).send(`Error: ${e.message}`)
+    }
+  }
+})
+
+/* POST pay debts by requester */
+router.post('/pay', async (req, res) => {
+  const { payer, requester } = req.body
+  try {
+    await Debt.deleteMany({ payer: payer, requester: requester })
+    res.status(200).send('Debts paid.')
+  } catch (e) {
+    res.status(400).send(`Error: ${e.message}`)
+  }
+})
+
 const singleRouter = express.Router()
 
 const findByIdMiddleware = async (req, res, next) => {
@@ -76,12 +131,6 @@ const findByIdMiddleware = async (req, res, next) => {
 /* GET single debt */
 singleRouter.get('/', async (req, res) => {
   res.status(200).send(req.debt)
-})
-
-/* DELETE single debt */
-singleRouter.delete('/', async (req, res) => {
-  await req.debt.delete()
-  res.sendStatus(200)
 })
 
 router.use('/:id', findByIdMiddleware, singleRouter)

@@ -27,7 +27,7 @@ const Main = (props) => {
         <div className='Debt-dashboard-list'>
           {userDebts.length > 0 ? userDebts.map(debt => {
             return (
-              <div key={debt._id} className='Debt-dashboard-row'>
+              <div key={debt.requester} className='Debt-dashboard-row'>
                 <small className='Debt-dashboard-item-left'>{debt.requester}: </small>
                 <b className='Debt-dashboard-item-right'><small>{debt.totalAmount}€</small></b>
               </div>
@@ -40,8 +40,7 @@ const Main = (props) => {
         <div className='Debt-dashboard-list'>
           {userDues.length > 0 ? userDues.map(due => {
             return (
-              <div key={due._id} className='Debt-dashboard-row'>
-                {console.log(due)}
+              <div key={due.payer} className='Debt-dashboard-row'>
                 <small className='Debt-dashboard-item-left'>{due.payer}: </small>
                 <b className='Debt-dashboard-item-right'><small>{due.totalAmount}€</small></b>
               </div>
