@@ -20,7 +20,8 @@ router.get('/:payer', async (req, res) => {
     const debtsPerRequester = debts.filter(d => d.requester === user.name)
     if (debtsPerRequester.length > 0) {
       const amounts = debtsPerRequester.map(d => d.amount)
-      const totalAmount = amounts.reduce((a, b) => a + b, 0)
+      let totalAmount = amounts.reduce((a, b) => a + b, 0)
+      totalAmount = totalAmount.toFixed(1)
       const messages = debtsPerRequester.map(d => d.message)
       const aggregatedDebt = {
         requester: user.name,
@@ -47,7 +48,8 @@ router.get('/dues/:requester', async (req, res) => {
     const duesPerPayer = dues.filter(d => d.payer === user.name)
     if (duesPerPayer.length > 0) {
       const amounts = duesPerPayer.map(d => d.amount)
-      const totalAmount = amounts.reduce((a, b) => a + b, 0)
+      let totalAmount = amounts.reduce((a, b) => a + b, 0)
+      totalAmount = totalAmount.toFixed(1)
       const messages = duesPerPayer.map(d => d.message)
       const aggregatedDue = {
         payer: user.name,
@@ -63,47 +65,79 @@ router.get('/dues/:requester', async (req, res) => {
   res.send(aggregatedDues)
 })
 
-/* POST add due(s) */
-// TBA optimization algorithm
-router.post('/addDue', async (req, res) => {
-  const { requester, payers, amount, message } = req.body
-  // add debts to all users
-  if (payers[0] === 'Kaikki') {
-    try {
-      const users = await User.find({})
-      const amountPerUser = amount / users.length
-      users.forEach((user) => {
-        // skip the requester
-        if (user.name === requester) return
-        Debt.create({
-          requester: requester,
-          payer: user.name,
-          amount: amountPerUser,
-          message: `- ${message}`
-        })
-      })
-      res.status(200).send('Due(s) added.')
-    } catch (e) {
-      res.status(400).send(`Error: ${e.message}`)
+// when the requester has existing debt to the payer
+const handleCounterDebt = async (oldDebts, requester, payer, newDebtAmount, message) => {
+  let totalOtherwayDebt = 0
+  if (oldDebts.length > 1) {
+    for (const debt of oldDebts) {
+      totalOtherwayDebt += debt.amount
     }
-  // add debts to selected users only
   } else {
-    try {
-      const amountPerUser = amount / payers.length
-      await payers.forEach(payer => {
-        // skip the requester
-        if (payer === requester) return
-        Debt.create({
-          requester: requester,
-          payer: payer,
-          amount: amountPerUser,
-          message: `- ${message}`
-        })
-      })
-      res.status(200).send('Due(s) added.')
-    } catch (e) {
-      res.status(400).send(`Error: ${e.message}`)
+    totalOtherwayDebt = oldDebts[0].amount
+  }
+  // if old debt is not wiped by the new debt
+  if (totalOtherwayDebt > newDebtAmount) {
+    let negativeAmount = newDebtAmount * (-1)
+    negativeAmount = negativeAmount.toFixed(1)
+    await Debt.create({
+      requester: payer,
+      payer: requester,
+      amount: negativeAmount,
+      message: `+ ${message} ( ${newDebtAmount}€ )`
+    })
+  } else if (totalOtherwayDebt < newDebtAmount) { // if new debt is bigger than old debt
+    await Debt.deleteMany({ requester: payer, payer: requester })
+    let reducedAmount = newDebtAmount - totalOtherwayDebt
+    reducedAmount = reducedAmount.toFixed(1)
+    let messageAmountsFlipped = `- ${message} ( ${newDebtAmount}€ )`
+    for (const debt of oldDebts) {
+      const flippedMessage = debt.message.replace('-', '+')
+      messageAmountsFlipped += `|${flippedMessage}`
     }
+    await Debt.create({
+      requester: requester,
+      payer: payer,
+      amount: reducedAmount,
+      message: messageAmountsFlipped
+    })
+  } else { // all debts between requester and payer cancel each other
+    await Debt.deleteMany({ requester: payer, payer: requester })
+  }
+}
+
+/* POST add due(s) */
+router.post('/addDue', async (req, res) => {
+  try {
+    const { requester, payers, amount, message } = req.body
+    let actualPayers
+    let amountPerUser
+    if (payers[0] === 'Kaikki') {
+      const users = await User.find({})
+      actualPayers = users.map(user => user.name)
+    } else {
+      actualPayers = payers
+    }
+    amountPerUser = amount / actualPayers.length
+    amountPerUser = amountPerUser.toFixed(1)
+    for (const payer of actualPayers) {
+      // skip the requester
+      if (payer === requester) continue
+      // check if debt(s) exists the other way
+      const debtsOtherWay = await Debt.find({ requester: payer, payer: requester })
+      if (debtsOtherWay.length > 0) {
+        handleCounterDebt(debtsOtherWay, requester, payer, amountPerUser, message)
+        continue
+      }
+      await Debt.create({
+        requester: requester,
+        payer: payer,
+        amount: amountPerUser,
+        message: `- ${message} ( ${amountPerUser}€ )`
+      })
+    }
+    res.send('Due(s) added.')
+  } catch (e) {
+    res.status(400).send(`Error: ${e.message}`)
   }
 })
 

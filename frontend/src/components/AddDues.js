@@ -42,6 +42,11 @@ const AddDues = (props) => {
       setRequestError(false)
     }
     const formattedAmount = formatAmount()
+    console.log(typeof(formattedAmount))
+    if (!formattedAmount) {
+      setErrorMessage('Summan pitää olla luku.')
+      return
+    }
     try {
       const res = await axios.post(`http://127.0.0.1:3001/debts/addDue`, {
         requester: props.user,
@@ -105,7 +110,7 @@ const AddDues = (props) => {
           <input type='text' className='Input-field-message' placeholder='Viesti' value={message} onChange={(event) => setMessage(event.target.value)} />
         </div>
       </div>
-      {errorMessage && <p>{errorMessage}</p>}
+      {errorMessage && <p className='Error-message'>{errorMessage}</p>}
       {!requestSent && <button className={classNames({ 'btn Add-btn': !requestError }, { 'btn Add-btn Error': requestError })} onClick={async () => await addDue()}>Pyydä</button>}
       {requestSent && <svg onClick={() => clearInputs()} className='checkmark' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
         <circle className='checkmark__circle' cx="26" cy="26" r="25" fill="none" />

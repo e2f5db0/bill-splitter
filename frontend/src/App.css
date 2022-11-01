@@ -139,6 +139,7 @@ h3 {
   padding: 1em;
   padding-bottom: 2em;
   width: 90%;
+  margin-top: 1em;
 }
 
 .Payment-container h2 {
@@ -191,10 +192,11 @@ h3 {
 
 .Payment-message-list {
   margin-top: .5em;
+  margin-left: 1.5em;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: left;
+  text-align: left;
 }
 
 .Payment-message-list p {
@@ -211,6 +213,7 @@ h3 {
   padding: 1em;
   padding-bottom: 2em;
   width: 90%;
+  margin-top: 1em;
 }
 
 .AddDue-user-selection {
@@ -577,5 +580,9 @@ h3 {
   }
   .Error {
     border: 1px solid red;
+  }
+  .Error-message {
+    margin: 0;
+    margin-top: .5em;
   }
 }

@@ -13,20 +13,31 @@ const Pay = (props) => {
   const [messages, setMessages] = useState([])
   const [showMessages, setShowMessages] = useState(false)
 
-  useEffect(() => {
-    async function fetchDebts() {
-      const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)
-      setDebts(res.data)
-      // preselect if there is only one requester
-      if (res.data.length === 1) {
-        const debt = res.data[0]
-        setSelected(debt.requester)
-        setTotalAmount(debt.totalAmount)
-        setMessages(debt.messages)
-      }
+  async function fetchDebts() {
+    const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)
+    setDebts(res.data)
+    // preselect if there is only one requester
+    if (res.data.length === 1) {
+      const debt = res.data[0]
+      setSelected(debt.requester)
+      setTotalAmount(debt.totalAmount)
+      formatMessages(debt.messages)
     }
+  }
+  useEffect(() => {
     fetchDebts()
   }, [])
+
+  const formatMessages = (msgs) => {
+    for (const msg of msgs) {
+      const formattedRows = msg.split('|')
+      if (formattedRows.length > 1) {
+        setMessages(formattedRows)
+      } else {
+        setMessages(msgs)
+      }
+    }
+  }
 
   const pay = async () => {
     if (selected.length === 0) {
@@ -50,7 +61,9 @@ const Pay = (props) => {
   }
 
   const handleSelection = (username) => {
+    fetchDebts()
     setShowMessages(false)
+    setPaymentSent(false)
     if (selected === username) {
       setSelected('')
       setErrorMessage('')
@@ -59,11 +72,12 @@ const Pay = (props) => {
       // show debt details for the selected user
       const debt = debts.filter(debt => debt.requester === username)[0]
       setTotalAmount(debt.totalAmount)
-      setMessages(debt.messages)
+      formatMessages(debt.messages)
     }
   }
 
   const clearSelection = () => {
+    fetchDebts()
     setSelected('')
     setPaymentSent(false)
   }
