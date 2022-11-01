@@ -47,7 +47,7 @@ const Pay = (props) => {
       setError(false)
     }
     try {
-      const res = await axios.post(`http://127.0.0.1:3001/debts/pay`, {
+      const res = await axios.post('http://127.0.0.1:3001/debts/pay', {
         payer: props.user,
         requester: selected
       })

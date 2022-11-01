@@ -2,10 +2,10 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 const Main = (props) => {
-  
+
   const [userDebts, setUserDebts] = useState([])
   const [userDues, setUserDues] = useState([])
-  
+
   useEffect(() => {
     async function fetchDebts() {
       const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)

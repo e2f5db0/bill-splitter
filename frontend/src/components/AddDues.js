@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 
-const querystring = require('querystring')
-
 const AddDues = (props) => {
 
   const [users, setUsers] = useState([])
@@ -42,13 +40,12 @@ const AddDues = (props) => {
       setRequestError(false)
     }
     const formattedAmount = formatAmount()
-    console.log(typeof(formattedAmount))
     if (!formattedAmount) {
       setErrorMessage('Summan pitää olla luku.')
       return
     }
     try {
-      const res = await axios.post(`http://127.0.0.1:3001/debts/addDue`, {
+      const res = await axios.post('http://127.0.0.1:3001/debts/addDue', {
         requester: props.user,
         payers: selected,
         amount: formattedAmount,
@@ -59,7 +56,7 @@ const AddDues = (props) => {
         setErrorMessage('')
       }
     } catch (e) {
-      setErrorMessage(`Error: Request failed`)
+      setErrorMessage('Error: Request failed')
     }
   }
 
