@@ -42,8 +42,6 @@ Now change the credentials in [mongo-init.js](https://github.com/e2f5db0/bill-sp
 
 ## Running the development containers
 
-`Note:` Make sure you are not connected to a VPN or else the network created by docker-compose will be unreachable during development.
-
 `Note:` It may be a good idea to delete *package-lock.json* files from both frontend and backend before continuing.
 
 In the root folder:
