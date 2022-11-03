@@ -62,9 +62,6 @@ In the root folder:
 
 ```
 "dev": "nodemon -L index.js"`Debug:` If changes do not trigger nodemon live-reload, try to add -L (--legacy-watch) flag to dev script in *package.json*:
-
-```
-"dev 
 ```
 
 ### Linting

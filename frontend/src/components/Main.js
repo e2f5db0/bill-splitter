@@ -51,9 +51,9 @@ const Main = (props) => {
       <div className='Main-button' onClick={() => props.setView('addDues')}>
         <p>Pyydä</p>
       </div>
-      <div className='Main-button' onClick={() => props.setView('pay')}>
+      {userDebts.length > 0 && <div className='Main-button' onClick={() => props.setView('pay')}>
         <p>Maksa</p>
-      </div>
+      </div>}
     </div>
   )
 }

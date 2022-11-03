@@ -9,7 +9,7 @@ COPY . .
 
 RUN npm install
 
-RUN CI=true npm test
+#RUN CI=true npm test
 
 RUN npm run build
 

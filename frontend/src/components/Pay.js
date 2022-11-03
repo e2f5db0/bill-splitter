@@ -12,6 +12,7 @@ const Pay = (props) => {
   const [totalAmount, setTotalAmount] = useState('')
   const [messages, setMessages] = useState([])
   const [showMessages, setShowMessages] = useState(false)
+  const [amountToBePayed, setAmountToBePayed] = useState('')
 
   async function fetchDebts() {
     const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)
@@ -40,16 +41,22 @@ const Pay = (props) => {
   }
 
   const pay = async () => {
-    if (selected.length === 0) {
-      setError(true)
-      return
-    } else {
-      setError(false)
+    // amount is optional
+    if (amountToBePayed !== '') {
+      const formattedAmount = Number(amountToBePayed.replace(',', '.'))
+      // NaN if amount is not a number
+      if (!formattedAmount) {
+        setError(true)
+        return
+      } else {
+        setError(false)
+      }
     }
     try {
       const res = await axios.post('http://127.0.0.1:3001/debts/pay', {
         payer: props.user,
-        requester: selected
+        requester: selected,
+        amount: amountToBePayed
       })
       if (res.status === 200) {
         setPaymentSent(true)
@@ -79,6 +86,7 @@ const Pay = (props) => {
   const clearSelection = () => {
     fetchDebts()
     setSelected('')
+    setAmountToBePayed('')
     setPaymentSent(false)
   }
 
@@ -101,12 +109,15 @@ const Pay = (props) => {
           </div>}
         </div>
       </div>
-      {(!paymentSent && selected) && <button className={classNames({ 'btn Pay-btn': !error }, { 'btn Pay-btn Error': error })} onClick={async () => await pay()}>Maksa</button>}
-      {errorMessage && <p>{errorMessage}</p>}
-      {paymentSent && <svg onClick={() => clearSelection()} className='checkmark' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-        <circle className='checkmark__circle' cx="26" cy="26" r="25" fill="none" />
-        <path className='checkmark__check' fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-      </svg>}
+      <div className='Payment-inputs'>
+        {selected && <input type='text' className={classNames({'Payment-input-field-amount': !error}, {'Payment-input-field-amount Error': error})} placeholder='Summa (optional)' value={amountToBePayed} onChange={(event) => setAmountToBePayed(event.target.value)} />}
+        {(!paymentSent && selected) && <button className='btn Pay-btn' onClick={async () => await pay()}>Maksa</button>}
+        {errorMessage && <p>{errorMessage}</p>}
+        {paymentSent && <svg onClick={() => clearSelection()} className='checkmark' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+          <circle className='checkmark__circle' cx="26" cy="26" r="25" fill="none" />
+          <path className='checkmark__check' fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+        </svg>}
+      </div>
     </div>
   )
 }

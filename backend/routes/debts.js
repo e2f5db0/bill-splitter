@@ -143,8 +143,41 @@ router.post('/addDue', async (req, res) => {
 
 /* POST pay debts by requester */
 router.post('/pay', async (req, res) => {
-  const { payer, requester } = req.body
+  const { payer, requester, amount } = req.body
   try {
+    if (!amount) {
+      await Debt.deleteMany({ payer: payer, requester: requester })
+      res.status(200).send('Debts paid.')
+      return
+    }
+    const debts = await Debt.find({ requester: requester, payer: payer })
+    const amounts = debts.map(d => d.amount)
+    let totalDebt
+    if (debts.length === 1) {
+      totalDebt = debts[0].amount
+    } else {
+      totalDebt = amounts.reduce((a, b) => a + b, 0)
+    }
+    if (amount < totalDebt) {
+      const negativeAmount = amount * (-1) 
+      await Debt.create({
+        requester: requester,
+        payer: payer,
+        amount: negativeAmount,
+        message: `+ Vähennys ( ${amount}€ )`
+      })
+      res.status(200).send('Debts paid.')
+    } else if (amount > totalDebt) {
+      // create counter debt
+      const newAmount = (totalDebt - amount) * (-1)
+      await Debt.create({
+        requester: payer,
+        payer: requester,
+        amount: newAmount,
+        message: `- Liikamaksu ( ${newAmount}€ )`
+      })
+    }
+    // if amount >= totalDebt
     await Debt.deleteMany({ payer: payer, requester: requester })
     res.status(200).send('Debts paid.')
   } catch (e) {
