@@ -119,7 +119,7 @@ const Pay = (props) => {
         </div>
       </div>
       <div className='Payment-inputs'>
-        {selected && <input type='text' className={classNames({'Payment-input-field-amount': !error}, {'Payment-input-field-amount Error': error})} placeholder='Summa (optional)' value={amountToBePayed} onChange={(event) => setAmountToBePayed(event.target.value)} />}
+        {selected && <input type='text' className={classNames({ 'Payment-input-field-amount': !error }, { 'Payment-input-field-amount Error': error })} placeholder='Summa (optional)' value={amountToBePayed} onChange={(event) => setAmountToBePayed(event.target.value)} />}
         {(!paymentSent && selected) && <button className='btn Pay-btn' onClick={async () => await pay()}>{paymentConfirmation ? 'Vahvista' : 'Maksa'}</button>}
         {errorMessage && <p>{errorMessage}</p>}
         {paymentSent && <svg onClick={() => clearSelection()} className='checkmark' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">

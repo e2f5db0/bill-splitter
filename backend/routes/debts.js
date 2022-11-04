@@ -11,18 +11,18 @@ router.get('/', async (_, res) => {
 
 const illegalInput = (input) => {
   if (!input) return false
-  if (typeof(input) === 'object') {
+  if (typeof (input) === 'object') {
     try {
       for (const i of input) {
         if (!i.match(/^[a-zäö]+$/i)) return true
       }
-    } catch {
+    } catch (error) {
       return false
     }
   }
   if (input.length > 60) return true
-  if (typeof(input) === 'string' && !input.match(/^[a-zäö ]+$/i)) return true
-  if (typeof(input) === 'number' && !String(input).match(/^[0-9.]+$/i)) return true
+  if (typeof (input) === 'string' && !input.match(/^[a-zäö ]+$/i)) return true
+  if (typeof (input) === 'number' && !String(input).match(/^[0-9.]+$/i)) return true
   return false
 }
 
@@ -178,11 +178,11 @@ router.post('/addDue', async (req, res) => {
 router.post('/pay', async (req, res) => {
   const { payer, requester, amount } = req.body
   if (illegalInput(payer) ||
-      illegalInput(requester) ||
-      illegalInput(amount)) {
-      res.status(400).send('Error: illegal input.')
-      return
-    }
+    illegalInput(requester) ||
+    illegalInput(amount)) {
+    res.status(400).send('Error: illegal input.')
+    return
+  }
   try {
     if (!amount) {
       await Debt.deleteMany({ payer: payer, requester: requester })
