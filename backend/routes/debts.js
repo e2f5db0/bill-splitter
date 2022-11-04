@@ -9,9 +9,30 @@ router.get('/', async (_, res) => {
   res.send(debts)
 })
 
+const illegalInput = (input) => {
+  if (!input) return false
+  if (typeof(input) === 'object') {
+    try {
+      for (const i of input) {
+        if (!i.match(/^[a-zäö]+$/i)) return true
+      }
+    } catch {
+      return false
+    }
+  }
+  if (input.length > 60) return true
+  if (typeof(input) === 'string' && !input.match(/^[a-zäö ]+$/i)) return true
+  if (typeof(input) === 'number' && !String(input).match(/^[0-9.]+$/i)) return true
+  return false
+}
+
 /* GET debts by payer */
 router.get('/:payer', async (req, res) => {
   const { payer } = req.params
+  if (illegalInput(payer)) {
+    res.status(400).send('Error: illegal input.')
+    return
+  }
   const debts = await Debt.find({ payer: payer })
   // aggregate entries per payer
   const users = await User.find({})
@@ -40,6 +61,10 @@ router.get('/:payer', async (req, res) => {
 /* GET dues by requester */
 router.get('/dues/:requester', async (req, res) => {
   const { requester } = req.params
+  if (illegalInput(requester)) {
+    res.status(400).send('Error: illegal input.')
+    return
+  }
   const dues = await Debt.find({ requester: requester })
   // aggregate entries per payer
   const users = await User.find({})
@@ -109,6 +134,14 @@ const handleCounterDebt = async (oldDebts, requester, payer, newDebtAmount, mess
 router.post('/addDue', async (req, res) => {
   try {
     const { requester, payers, amount, message } = req.body
+    // sanitize inputs
+    if (illegalInput(requester) ||
+      illegalInput(payers) ||
+      illegalInput(amount) ||
+      illegalInput(message)) {
+      res.status(400).send('Error: illegal input.')
+      return
+    }
     let actualPayers
     let amountPerUser
     if (payers[0] === 'Kaikki') {
@@ -144,6 +177,12 @@ router.post('/addDue', async (req, res) => {
 /* POST pay debts by requester */
 router.post('/pay', async (req, res) => {
   const { payer, requester, amount } = req.body
+  if (illegalInput(payer) ||
+      illegalInput(requester) ||
+      illegalInput(amount)) {
+      res.status(400).send('Error: illegal input.')
+      return
+    }
   try {
     if (!amount) {
       await Debt.deleteMany({ payer: payer, requester: requester })
@@ -159,7 +198,8 @@ router.post('/pay', async (req, res) => {
       totalDebt = amounts.reduce((a, b) => a + b, 0)
     }
     if (amount < totalDebt) {
-      const negativeAmount = amount * (-1) 
+      let negativeAmount = amount * (-1)
+      negativeAmount = negativeAmount.toFixed(1)
       await Debt.create({
         requester: requester,
         payer: payer,
@@ -167,9 +207,11 @@ router.post('/pay', async (req, res) => {
         message: `+ Vähennys ( ${amount}€ )`
       })
       res.status(200).send('Debts paid.')
+      return
     } else if (amount > totalDebt) {
       // create counter debt
-      const newAmount = (totalDebt - amount) * (-1)
+      let newAmount = (totalDebt - amount) * (-1)
+      newAmount = newAmount.toFixed(1)
       await Debt.create({
         requester: payer,
         payer: requester,

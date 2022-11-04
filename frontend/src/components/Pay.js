@@ -13,6 +13,7 @@ const Pay = (props) => {
   const [messages, setMessages] = useState([])
   const [showMessages, setShowMessages] = useState(false)
   const [amountToBePayed, setAmountToBePayed] = useState('')
+  const [paymentConfirmation, setPaymentConfirmation] = useState(false)
 
   async function fetchDebts() {
     const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)
@@ -41,9 +42,14 @@ const Pay = (props) => {
   }
 
   const pay = async () => {
+    if (!paymentConfirmation) {
+      setPaymentConfirmation(true)
+      return
+    }
     // amount is optional
+    let formattedAmount
     if (amountToBePayed !== '') {
-      const formattedAmount = Number(amountToBePayed.replace(',', '.'))
+      formattedAmount = Number(amountToBePayed.replace(',', '.'))
       // NaN if amount is not a number
       if (!formattedAmount) {
         setError(true)
@@ -56,10 +62,11 @@ const Pay = (props) => {
       const res = await axios.post('http://127.0.0.1:3001/debts/pay', {
         payer: props.user,
         requester: selected,
-        amount: amountToBePayed
+        amount: formattedAmount
       })
       if (res.status === 200) {
         setPaymentSent(true)
+        setPaymentConfirmation(false)
         setErrorMessage('')
       }
     } catch (e) {
@@ -71,6 +78,7 @@ const Pay = (props) => {
     fetchDebts()
     setShowMessages(false)
     setPaymentSent(false)
+    setPaymentConfirmation(false)
     if (selected === username) {
       setSelected('')
       setErrorMessage('')
@@ -88,6 +96,7 @@ const Pay = (props) => {
     setSelected('')
     setAmountToBePayed('')
     setPaymentSent(false)
+    setPaymentConfirmation(false)
   }
 
   return (
@@ -111,7 +120,7 @@ const Pay = (props) => {
       </div>
       <div className='Payment-inputs'>
         {selected && <input type='text' className={classNames({'Payment-input-field-amount': !error}, {'Payment-input-field-amount Error': error})} placeholder='Summa (optional)' value={amountToBePayed} onChange={(event) => setAmountToBePayed(event.target.value)} />}
-        {(!paymentSent && selected) && <button className='btn Pay-btn' onClick={async () => await pay()}>Maksa</button>}
+        {(!paymentSent && selected) && <button className='btn Pay-btn' onClick={async () => await pay()}>{paymentConfirmation ? 'Vahvista' : 'Maksa'}</button>}
         {errorMessage && <p>{errorMessage}</p>}
         {paymentSent && <svg onClick={() => clearSelection()} className='checkmark' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
           <circle className='checkmark__circle' cx="26" cy="26" r="25" fill="none" />

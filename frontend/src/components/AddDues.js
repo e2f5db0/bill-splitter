@@ -64,6 +64,13 @@ const AddDues = (props) => {
       }
     } catch (e) {
       setErrorMessage('Error: Request failed')
+      if (message.length > 60) {
+        setMessageError(true)
+        setErrorMessage('Viesti max. 60 merkkiä.')
+      } else {
+        setMessageError(false)
+        setErrorMessage('')
+      }
     }
   }
 
