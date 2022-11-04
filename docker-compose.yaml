@@ -17,7 +17,7 @@ services:
       - template-mongo
     container_name: template-backend
   template-mongo:
-    image: mongo
+    image: mongo:4.4.17
     ports: [
       3456:27017
     ]
