@@ -4,6 +4,8 @@ import classNames from 'classnames'
 
 const AddDues = (props) => {
 
+  const baseurl = process.env.REACT_APP_BACKEND_URL
+
   const [users, setUsers] = useState([])
   const [selected, setSelected] = useState([])
   const [amount, setAmount] = useState('')
@@ -16,7 +18,7 @@ const AddDues = (props) => {
 
   useEffect(() => {
     async function fetchUsers() {
-      const res = await axios.get('http://127.0.0.1:3001/users')
+      const res = await axios.get(`${baseurl}/users`)
       setUsers(res.data)
     }
     fetchUsers()
@@ -52,7 +54,7 @@ const AddDues = (props) => {
       return
     }
     try {
-      const res = await axios.post('http://127.0.0.1:3001/debts/addDue', {
+      const res = await axios.post(`${baseurl}/debts/addDue`, {
         requester: props.user,
         payers: selected,
         amount: formattedAmount,

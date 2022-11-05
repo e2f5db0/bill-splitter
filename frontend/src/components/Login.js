@@ -3,11 +3,13 @@ import axios from 'axios'
 
 const Login = (props) => {
 
+  const baseurl = process.env.REACT_APP_BACKEND_URL
+
   const [users, setUsers] = useState([])
 
   useEffect(() => {
     async function fetchUsers() {
-      const res = await axios.get('http://127.0.0.1:3001/users')
+      const res = await axios.get(`${baseurl}/users`)
       setUsers(res.data)
     }
     fetchUsers()

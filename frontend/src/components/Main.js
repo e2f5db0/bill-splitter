@@ -3,16 +3,18 @@ import React, { useEffect, useState } from 'react'
 
 const Main = (props) => {
 
+  const baseurl = process.env.REACT_APP_BACKEND_URL
+
   const [userDebts, setUserDebts] = useState([])
   const [userDues, setUserDues] = useState([])
 
   useEffect(() => {
     async function fetchDebts() {
-      const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)
+      const res = await axios.get(`${baseurl}/debts/${props.user}`)
       setUserDebts(res.data)
     }
     async function fetchDues() {
-      const res = await axios.get(`http://127.0.0.1:3001/debts/dues/${props.user}`)
+      const res = await axios.get(`${baseurl}/debts/dues/${props.user}`)
       setUserDues(res.data)
     }
     fetchDebts()

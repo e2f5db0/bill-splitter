@@ -4,6 +4,8 @@ import classNames from 'classnames'
 
 const Pay = (props) => {
 
+  const baseurl = process.env.REACT_APP_BACKEND_URL
+
   const [debts, setDebts] = useState([])
   const [selected, setSelected] = useState('')
   const [paymentSent, setPaymentSent] = useState(false)
@@ -16,7 +18,7 @@ const Pay = (props) => {
   const [paymentConfirmation, setPaymentConfirmation] = useState(false)
 
   async function fetchDebts() {
-    const res = await axios.get(`http://127.0.0.1:3001/debts/${props.user}`)
+    const res = await axios.get(`${baseurl}/debts/${props.user}`)
     setDebts(res.data)
     // preselect if there is only one requester
     if (res.data.length === 1) {
@@ -59,7 +61,7 @@ const Pay = (props) => {
       }
     }
     try {
-      const res = await axios.post('http://127.0.0.1:3001/debts/pay', {
+      const res = await axios.post(`${baseurl}/debts/pay`, {
         payer: props.user,
         requester: selected,
         amount: formattedAmount
