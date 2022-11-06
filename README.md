@@ -116,6 +116,7 @@ Run end-to-end tests (cypress)
 ```bash
 > docker-compose --env-file ./backend/.env up # with docker-compose
 > docker compose --env-file ./backend/.env up # with docker desktop
+> docker compose --env-file ./backend/.env up > /dev/null 2>&1 & # start in background
 # Run in other terminal
 > cd ./backend/
 > npm run test:e2e
