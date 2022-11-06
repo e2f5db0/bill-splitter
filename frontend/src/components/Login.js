@@ -13,7 +13,7 @@ const Login = (props) => {
       setUsers(res.data)
     }
     fetchUsers()
-  }, [])
+  }, [baseurl])
 
   return (
     <div className='Container'>

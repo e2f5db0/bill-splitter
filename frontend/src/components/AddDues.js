@@ -27,7 +27,7 @@ const AddDues = (props) => {
     //  props.user,
     //  ...selected
     //])
-  }, [])
+  }, [baseurl])
 
   const addDue = async () => {
     if (selected.length === 0) {
@@ -42,7 +42,7 @@ const AddDues = (props) => {
     } else {
       setAmountError(false)
     }
-    if (message === '') {
+    if (message === '' || !message.match(/^[a-zäö ]+$/i)) {
       setMessageError(true)
       return
     } else {

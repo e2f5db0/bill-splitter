@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 
@@ -17,7 +17,7 @@ const Pay = (props) => {
   const [amountToBePayed, setAmountToBePayed] = useState('')
   const [paymentConfirmation, setPaymentConfirmation] = useState(false)
 
-  async function fetchDebts() {
+  const fetchDebts = useCallback(async () => {
     const res = await axios.get(`${baseurl}/debts/${props.user}`)
     setDebts(res.data)
     // preselect if there is only one requester
@@ -27,27 +27,27 @@ const Pay = (props) => {
       setTotalAmount(debt.totalAmount)
       formatMessages(debt.messages)
     }
-  }
+  }, [baseurl, props.user])
+  
   useEffect(() => {
     fetchDebts()
-  }, [])
+  }, [baseurl, fetchDebts])
 
   const formatMessages = (msgs) => {
+    let allMessages = []
     for (const msg of msgs) {
       const formattedRows = msg.split('|')
-      if (formattedRows.length > 1) {
-        setMessages(formattedRows)
-      } else {
-        setMessages(msgs)
+      for (const row of formattedRows) {
+        allMessages = [
+          row,
+          ...allMessages
+        ]
       }
     }
+    setMessages(allMessages)
   }
 
   const pay = async () => {
-    if (!paymentConfirmation) {
-      setPaymentConfirmation(true)
-      return
-    }
     // amount is optional
     let formattedAmount
     if (amountToBePayed !== '') {
@@ -59,6 +59,10 @@ const Pay = (props) => {
       } else {
         setError(false)
       }
+    }
+    if (!paymentConfirmation) {
+      setPaymentConfirmation(true)
+      return
     }
     try {
       const res = await axios.post(`${baseurl}/debts/pay`, {

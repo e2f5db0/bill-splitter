@@ -19,7 +19,7 @@ const Main = (props) => {
     }
     fetchDebts()
     fetchDues()
-  }, [])
+  }, [baseurl, props.user])
 
   return (
     <div className='Container'>
