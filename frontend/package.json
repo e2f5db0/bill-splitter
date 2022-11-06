@@ -9,12 +9,11 @@
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "lodash.isequal": "^4.5.0",
-    "querystring": "^0.2.1",
     "react": "^16.13.1",
-    "react-audio-player": "^0.13.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3"
+    "react-scripts": "^3.4.3",
+    "typescript": "^3.9.10"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -37,8 +36,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "typescript": "^3.9.10"
   }
 }
