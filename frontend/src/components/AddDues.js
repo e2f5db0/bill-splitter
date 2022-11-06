@@ -89,11 +89,11 @@ const AddDues = (props) => {
   }
 
   const handleSelection = (username) => {
-    if (username === 'Kaikki' && !selected.includes('Kaikki')) {
-      setSelected(['Kaikki'])
+    if (username === 'Asukit' && !selected.includes('Asukit')) {
+      setSelected(['Asukit'])
       return
     }
-    if (username !== 'Kaikki' && selected.includes('Kaikki')) return
+    if (username !== 'Asukit' && selected.includes('Asukit')) return
     if (selected.includes(username)) {
       const newSelected = selected.filter(s => s !== username)
       setSelected(newSelected)
@@ -111,7 +111,7 @@ const AddDues = (props) => {
       <div className='AddDue-container'>
         <h2>Pyydä</h2>
         {users.length && <div className='AddDue-user-selection'>
-          <p key='Kaikki' className={classNames({ 'AddDue-user-item': !selected.includes('Kaikki') }, { 'AddDue-user-item Selected': selected.includes('Kaikki') }, { 'AddDue-user-item Error': payersError })} onClick={() => handleSelection('Kaikki')}>{'Kaikki'}</p>
+          <p key='Asukit' className={classNames({ 'AddDue-user-item': !selected.includes('Asukit') }, { 'AddDue-user-item Selected': selected.includes('Asukit') }, { 'AddDue-user-item Error': payersError })} onClick={() => handleSelection('Asukit')}>{'Asukit'}</p>
           {users.length > 0 && users.map(user => <p key={user.name} className={classNames({ 'AddDue-user-item': (!selected.includes(user.name) && !payersError) }, { 'AddDue-user-item Selected': selected.includes(user.name) }, { 'AddDue-user-item Error': payersError })} onClick={() => handleSelection(user.name)}>{user.name}</p>)}
         </div>}
         {!users.length &&

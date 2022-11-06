@@ -23,17 +23,6 @@ singleRouter.get('/', async (req, res) => {
   res.status(200).send(req.user)
 })
 
-/* PUT user */
-singleRouter.put('/', async (req, res) => {
-  const { name, totalDebt, totalDue } = req.body
-  const newUser = await User.findOneAndUpdate(
-    { _id: req.user._id },
-    { name, totalDebt, totalDue },
-    { new: true, useFindAndModify: false }
-  )
-  res.status(200).send(newUser)
-})
-
 router.use('/:id', findByIdMiddleware, singleRouter)
 
 module.exports = router

@@ -144,8 +144,8 @@ router.post('/addDue', async (req, res) => {
     }
     let actualPayers
     let amountPerUser
-    if (payers[0] === 'Kaikki') {
-      const users = await User.find({})
+    if (payers[0] === 'Asukit') {
+      const users = await User.find({ name: {$ne: 'Pastakas'} })
       actualPayers = users.map(user => user.name)
     } else {
       actualPayers = payers
