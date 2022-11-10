@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const express = require('express')
 const { Debt } = require('../mongo')
 const { User } = require('../mongo')
@@ -42,7 +43,7 @@ router.get('/:payer', async (req, res) => {
     if (debtsPerRequester.length > 0) {
       const amounts = debtsPerRequester.map(d => d.amount)
       let totalAmount = amounts.reduce((a, b) => a + b, 0)
-      totalAmount = totalAmount.toFixed(1)
+      totalAmount = totalAmount.toFixed(2)
       const messages = debtsPerRequester.map(d => d.message)
       const aggregatedDebt = {
         requester: user.name,
@@ -74,7 +75,7 @@ router.get('/dues/:requester', async (req, res) => {
     if (duesPerPayer.length > 0) {
       const amounts = duesPerPayer.map(d => d.amount)
       let totalAmount = amounts.reduce((a, b) => a + b, 0)
-      totalAmount = totalAmount.toFixed(1)
+      totalAmount = totalAmount.toFixed(2)
       const messages = duesPerPayer.map(d => d.message)
       const aggregatedDue = {
         payer: user.name,
@@ -103,27 +104,34 @@ const handleCounterDebt = async (oldDebts, requester, payer, newDebtAmount, mess
   // if old debt is not wiped by the new debt
   if (totalOtherwayDebt > newDebtAmount) {
     let negativeAmount = newDebtAmount * (-1)
-    negativeAmount = negativeAmount.toFixed(1)
+    negativeAmount = negativeAmount.toFixed(2)
     await Debt.create({
       requester: payer,
       payer: requester,
       amount: negativeAmount,
       message: `+ ${message} ( ${newDebtAmount}€ )`
     })
-  } else if (totalOtherwayDebt < newDebtAmount) { // if new debt is bigger than old debt
+    // if old debt is wiped by the new debt
+  } else if (totalOtherwayDebt < newDebtAmount) {
     await Debt.deleteMany({ requester: payer, payer: requester })
-    let reducedAmount = newDebtAmount - totalOtherwayDebt
-    reducedAmount = reducedAmount.toFixed(1)
-    let messageAmountsFlipped = `- ${message} ( ${newDebtAmount}€ )`
+    let messageHistoryAmountsFlipped = `- ${message} ( ${newDebtAmount}€ )`
     for (const debt of oldDebts) {
-      const flippedMessage = debt.message.replace('-', '+')
-      messageAmountsFlipped += `|${flippedMessage}`
+      // flip plus to minus and minus to plus
+      const flippedMessage = debt.message.replace('-', '§').replace('+', '#').replace('§', '+').replace('#', '-')
+      await Debt.create({
+        requester: requester,
+        payer: payer,
+        amount: 0,
+        message: flippedMessage
+      })
     }
+    let reducedAmount = newDebtAmount - totalOtherwayDebt
+    reducedAmount = reducedAmount.toFixed(2)
     await Debt.create({
       requester: requester,
       payer: payer,
       amount: reducedAmount,
-      message: messageAmountsFlipped
+      message: messageHistoryAmountsFlipped
     })
   } else { // all debts between requester and payer cancel each other
     await Debt.deleteMany({ requester: payer, payer: requester })
@@ -133,6 +141,12 @@ const handleCounterDebt = async (oldDebts, requester, payer, newDebtAmount, mess
 /* POST add due(s) */
 router.post('/addDue', async (req, res) => {
   try {
+    const { token } = req.body
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!decodedToken.id) {
+      res.status(401).json({ error: 'token missing or invalid' })
+      return
+    }
     const { requester, payers, amount, message } = req.body
     // sanitize inputs
     if (illegalInput(requester) ||
@@ -145,13 +159,13 @@ router.post('/addDue', async (req, res) => {
     let actualPayers
     let amountPerUser
     if (payers[0] === 'Asukit') {
-      const users = await User.find({ name: {$ne: 'Pastakas'} })
+      const users = await User.find({ name: { $ne: 'Pastakas' } })
       actualPayers = users.map(user => user.name)
     } else {
       actualPayers = payers
     }
     amountPerUser = amount / actualPayers.length
-    amountPerUser = amountPerUser.toFixed(1)
+    amountPerUser = amountPerUser.toFixed(2)
     for (const payer of actualPayers) {
       // skip the requester
       if (payer === requester) continue
@@ -176,6 +190,12 @@ router.post('/addDue', async (req, res) => {
 
 /* POST pay debts by requester */
 router.post('/pay', async (req, res) => {
+  const { token } = req.body
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    res.status(401).json({ error: 'token missing or invalid' })
+    return
+  }
   const { payer, requester, amount } = req.body
   if (illegalInput(payer) ||
     illegalInput(requester) ||
@@ -198,20 +218,21 @@ router.post('/pay', async (req, res) => {
       totalDebt = amounts.reduce((a, b) => a + b, 0)
     }
     if (amount < totalDebt) {
+      let amountToFixed = amount.toFixed(2)
       let negativeAmount = amount * (-1)
-      negativeAmount = negativeAmount.toFixed(1)
+      negativeAmount = negativeAmount.toFixed(2)
       await Debt.create({
         requester: requester,
         payer: payer,
         amount: negativeAmount,
-        message: `+ Vähennys ( ${amount}€ )`
+        message: `+ Vähennys ( ${amountToFixed}€ )`
       })
       res.status(200).send('Debts paid.')
       return
     } else if (amount > totalDebt) {
       // create counter debt
       let newAmount = (totalDebt - amount) * (-1)
-      newAmount = newAmount.toFixed(1)
+      newAmount = newAmount.toFixed(2)
       await Debt.create({
         requester: payer,
         payer: requester,

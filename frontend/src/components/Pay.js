@@ -68,7 +68,8 @@ const Pay = (props) => {
       const res = await axios.post(`${baseurl}/debts/pay`, {
         payer: props.user,
         requester: selected,
-        amount: formattedAmount
+        amount: formattedAmount,
+        token: props.token
       })
       if (res.status === 200) {
         setPaymentSent(true)
@@ -103,6 +104,7 @@ const Pay = (props) => {
     setAmountToBePayed('')
     setPaymentSent(false)
     setPaymentConfirmation(false)
+    setShowMessages(false)
   }
 
   return (

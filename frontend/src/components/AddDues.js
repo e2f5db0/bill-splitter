@@ -58,7 +58,8 @@ const AddDues = (props) => {
         requester: props.user,
         payers: selected,
         amount: formattedAmount,
-        message: message
+        message: message,
+        token: props.token
       })
       if (res.status === 200) {
         setRequestSent(true)
