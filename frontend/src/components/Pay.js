@@ -25,27 +25,13 @@ const Pay = (props) => {
       const debt = res.data[0]
       setSelected(debt.requester)
       setTotalAmount(debt.totalAmount)
-      formatMessages(debt.messages)
+      setMessages(debt.messages)
     }
   }, [baseurl, props.user])
   
   useEffect(() => {
     fetchDebts()
   }, [baseurl, fetchDebts])
-
-  const formatMessages = (msgs) => {
-    let allMessages = []
-    for (const msg of msgs) {
-      const formattedRows = msg.split('|')
-      for (const row of formattedRows) {
-        allMessages = [
-          row,
-          ...allMessages
-        ]
-      }
-    }
-    setMessages(allMessages)
-  }
 
   const pay = async () => {
     // amount is optional
@@ -94,7 +80,7 @@ const Pay = (props) => {
       // show debt details for the selected user
       const debt = debts.filter(debt => debt.requester === username)[0]
       setTotalAmount(debt.totalAmount)
-      formatMessages(debt.messages)
+      setMessages(debt.messages)
     }
   }
 
