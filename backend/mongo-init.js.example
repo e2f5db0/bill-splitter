@@ -1,0 +1,27 @@
+// mongo-init.js should be located in backend/mongo/mongo-init.js
+
+// MongoDB initialization script
+// This file is executed when the MongoDB container starts for the first time
+// Note: This file cannot use environment variables from .env, so credentials must be hardcoded
+// Make sure these match your backend/.env file
+
+db = db.getSiblingDB('DB_NAME_HERE');
+
+db.createUser({
+  user: 'DB_USER_HERE',
+  pwd: 'DB_PASSWORD_HERE',
+  roles: [
+    {
+      role: 'readWrite',
+      db: 'DB_NAME_HERE',
+    },
+  ],
+});
+
+db.createCollection('users')
+db.createCollection('debts')
+
+// initialize users in the database 
+db.users.insert({ name: 'USERNAME1', balance: 0 })
+db.users.insert({ name: 'USERNAME2', balance: 0 })
+db.users.insert({ name: 'USERNAME3', balance: 0 })

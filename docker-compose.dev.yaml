@@ -1,0 +1,57 @@
+services:
+  template-backend-dev:
+    build:
+      context: ./backend
+      dockerfile: dev.Dockerfile
+    ports: [
+      3001:3001
+    ]
+    volumes:
+      - ./backend/:/usr/src/template-backend
+    environment: 
+      MONGO_URL: "${MONGO_URL_DEV}"
+    depends_on:
+      - template-mongo-dev
+    container_name: template-backend-dev
+  template-mongo-dev:
+    image: mongo
+    ports: [
+      3456:27017
+    ]
+    environment:
+      # These are fetched from the ./backend/.env file
+      MONGO_INITDB_ROOT_USERNAME: "${DB_ROOT_USER}"
+      MONGO_INITDB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MONGO_INITDB_DATABASE: "${DB_NAME}"
+    volumes:
+      - ./backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./backend/mongo_data:/data/db
+    container_name: template-mongo-dev
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports: [
+      8080:80
+    ]
+    container_name: template-reverse-proxy
+    depends_on:
+      - template-frontend-dev
+      - template-backend-dev
+  template-frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: dev.Dockerfile
+      args:
+        REACT_APP_BACKEND_URL: /api
+    ports: [
+      3000:3000
+    ]
+    volumes:
+      - ./frontend/:/usr/src/template-frontend
+    environment:
+      REACT_APP_BACKEND_URL: /api
+    container_name: template-frontend-dev
+    tty: true
+volumes:
+  mongo_data:

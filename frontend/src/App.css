@@ -1,0 +1,725 @@
+/* Global styles */
+
+html {
+  background-color: #151515;
+}
+
+@font-face {
+  src: url('./fonts/Roboto-Light.ttf');
+  font-family: Roboto;
+}
+
+.backdrop {
+  z-index: 999;
+  background-color: black;
+  opacity: 0.9;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+h1 {
+  margin-top: .5em;
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+h3 {
+  margin-bottom: .3em;
+  margin-top: 0;
+}
+
+.App {
+  text-align: center;
+  font-family: Roboto;
+  color: #B4A5A5;
+}
+
+.Container {
+  margin: auto;
+  width: 90%;
+  font-size: calc(3px + 2vmin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.Navbar {
+  margin-top: 2em;
+  width: 100%;
+  height: 5em;
+  position: relative;
+  font-size: larger;
+  margin-bottom: 1em;
+}
+
+.logout {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 1em;
+  cursor: pointer;
+  width: 2em;
+}
+
+.Heading {
+  cursor: pointer;
+}
+
+.Debt-dashboard {
+  width: 30em;
+  padding: 1em;
+  border: solid 2px darkgray;
+  border-radius: 1em;
+  margin-bottom: 1em;
+}
+
+.Debt-dashboard-separator {
+  margin-top: 1em;
+  border-bottom: solid 1px darkgray;
+  width: 30em;
+}
+
+.Debt-dashboard-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Debt-dashboard-row {
+  display: flex;
+  border-bottom: solid 1px grey;
+  width: 12em;
+  justify-content: center;
+  align-items: center;
+}
+
+.Debt-dashboard-item-left {
+  width: 45%;
+  text-align: right;
+  margin-right: 1em;
+}
+
+.Debt-dashboard-item-right {
+  width: 30%;
+  text-align: left;
+}
+
+.Dues-title {
+  cursor: pointer;
+}
+
+.Dues-confirmation-dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.Dues-confirmation-dialog-cancel-button {
+  font-size: 1.5rem;
+  padding: 1em;
+  border: none;
+  border-radius: 1em;
+  background-color: #3C415C;
+  cursor: pointer;
+}
+
+.Dues-confirmation-dialog-delete-button {
+  font-size: 1.5rem;
+  padding: 1em;
+  border: none;
+  border-radius: 1em;
+  background-color: rgba(221, 44, 0, 0.87);
+  margin-left: 2em;
+  cursor: pointer;
+}
+
+.Debts-title {
+  cursor: pointer;
+}
+
+.Login-container {
+  margin: auto;
+  width: 90%;
+  font-size: calc(3px + 2vmin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2.5em;
+}
+
+.Login-password-field {
+  margin-bottom: 1em;
+  width: 80%;
+  height: 2em;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.Login-name-container {
+  padding: .5em;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  font-size: 1.4rem;
+  background-color: #3C415C;
+  width: 50%;
+}
+
+.Login-name-container:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+.Main-button {
+  padding: .5em;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  font-size: 2rem;
+  background-color: #3C415C;
+  width: 50%;
+}
+
+.Main-button:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+.Remove-button {
+  background-color: rgba(221, 44, 0, 0.87);
+  border-radius: 1em;
+  padding: .5em;
+  font-size: 1.1rem;
+  border: none;
+  color: gainsboro;
+}
+
+.Payment-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px darkgray;
+  border-radius: 1em;
+  padding: 1em;
+  padding-bottom: 2em;
+  width: 90%;
+  margin-top: 1em;
+}
+
+.Payment-container h2 {
+  margin-top: 0;
+}
+
+.Payment-user-selection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 90%;
+  flex-wrap: wrap;
+}
+
+.Payment-user-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5em;
+  height: 2em;
+  border-radius: 1em;
+  padding: 1em;
+  background-color: #3C415C;
+  border: 1px solid #3C415C;
+}
+
+.Payment-user-item:hover {
+  cursor: pointer;
+  background-color: #301B3F;
+}
+
+.Payment-messages-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3em;
+  height: 1.5em;
+  border-radius: 1em;
+  padding: 1em;
+  margin-top: 1em;
+  background-color: #3C415C;
+  margin-left: 1em;
+  font-size: 1rem;
+}
+
+.Payment-messages-button:hover {
+  cursor: pointer;
+  background-color: #301B3F;
+}
+
+.Payment-message-list {
+  margin-top: .5em;
+  margin-left: 1.5em;
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.Payment-message-list-item {
+  border-top: 1px solid #3C415C;
+  padding-top: 0.5em;
+}
+
+.AddDue-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px darkgray;
+  border-radius: 1em;
+  padding: 1em;
+  padding-bottom: 2em;
+  width: 90%;
+  margin-top: 1em;
+}
+
+.AddDue-user-selection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 90%;
+  flex-wrap: wrap;
+}
+
+.AddDue-user-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5em;
+  height: 2em;
+  border-radius: 1em;
+  padding: 1em;
+  background-color: #3C415C;
+  border: 1px solid #3C415C;
+}
+
+.AddDue-user-item:hover {
+  background-color: #301B3F;
+  cursor: pointer;
+}
+
+.AddDue-inputs {
+  display: flex;
+  margin-top: 1em;
+  width: 90%;
+  justify-content: space-between;
+}
+
+.Input-field-amount {
+  background-color: #3C415C;
+  width: 20%;
+  border: none;
+  height: 2em;
+  border-radius: .1em;
+  font-size: 2rem;
+  color: #B4A5A5;
+  padding: .2em;
+  margin-right: 1em;
+  text-align: center;
+}
+
+.Input-field-message {
+  background-color: #3C415C;
+  width: 80%;
+  border: none;
+  height: 2em;
+  border-radius: .1em;
+  font-size: 2rem;
+  color: #B4A5A5;
+  padding: .2em;
+  text-align: center;
+}
+
+.Payment-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Payment-input-field-amount {
+  background-color: #3C415C;
+  width: 90%;
+  border: none;
+  height: 1.5em;
+  border-radius: .1em;
+  font-size: 1.5rem;
+  color: #B4A5A5;
+  padding: .2em;
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: .5em;
+}
+
+.btn {
+  background-color: #3C415C;
+  width: 5em;
+  height: 3em;
+  border: none;
+  border-radius: 1em;
+  color: #B4A5A5;
+  font-size: 1.5rem;
+  margin-bottom: 1em;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.Add-btn {
+  margin-bottom: 0;
+  margin-top: 1.5em;
+  width: 6em;
+  height: 4em;
+  font-size: larger;
+}
+
+.Pay-btn {
+  margin-bottom: 0;
+  margin-top: 2em;
+  width: 6em;
+  height: 4em;
+  font-size: larger;
+}
+
+.Selected {
+  background-color: #301B3F;
+  border: 1px solid gainsboro;
+}
+
+.Daily-k-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: .5em;
+}
+
+.Daily-k {
+  margin: 0;
+}
+
+.Spin-icon {
+  width: 1.5em;
+  margin-left: .5em;
+  cursor: pointer;
+}
+
+.Rotate {
+  animation: spin .3s ease-out;
+}
+
+.Spin-icon:hover {
+  transform: scale(1.1);
+}
+
+.Half-circle-large {
+  width: 4em;
+  height: 2em;
+  /* as the half of the width */
+  border-top-left-radius: 110px;
+  /* 100px of height + 10px of border */
+  border-top-right-radius: 110px;
+  /* 100px of height + 10px of border */
+  border: 10px solid #301B3F;
+  border-bottom: 0;
+  animation: spin .5s infinite linear;
+  transform-origin: 50% 100%;
+}
+
+.Half-circle-small {
+  width: 4em;
+  height: 2em;
+  /* as the half of the width */
+  border-top-left-radius: 110px;
+  /* 100px of height + 10px of border */
+  border-top-right-radius: 110px;
+  /* 100px of height + 10px of border */
+  border: 10px solid #301B3F;
+  border-bottom: 0;
+  animation: spin-cc .5s infinite linear;
+  transform-origin: 50% 100%;
+}
+
+.Loading-animation-container {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 6em;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-cc {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+
+  10% {
+    transform: scale(1.3);
+  }
+
+  20% {
+    transform: scale(0.7);
+  }
+
+  30% {
+    transform: scale(1.3);
+  }
+
+  40% {
+    transform: scale(0.7);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+
+  60% {
+    transform: scale(0.7);
+  }
+
+  70% {
+    transform: scale(1.3);
+  }
+
+  80% {
+    transform: scale(0.7);
+  }
+
+  90% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #3C415C;
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark {
+  margin-top: 1em;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  box-shadow: inset 0px 0px 0px #301B3F;
+  animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scale {
+
+  0%,
+  100% {
+    transform: none;
+  }
+
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #301B3F;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(365deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .Navbar-items {
+    display: none;
+  }
+}
+
+@media (min-width: 901px) {
+  .Toggle-Button {
+    display: none;
+  }
+}
+
+.Arrow-icon {
+  width: 3em;
+  cursor: pointer;
+}
+
+@media(max-width: 1220px) {
+  .Navbar {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: medium;
+  }
+
+  .Container {
+    margin-top: 1em;
+    font-size: large;
+  }
+
+  .Container h1 {
+    margin-top: 0;
+    margin-bottom: .4em;
+  }
+
+  .Container h4 {
+    margin-top: .5em;
+    margin-bottom: .4em;
+  }
+
+  .Debt-dashboard {
+    padding: .7em;
+    width: 90%;
+    font-size: 1.5rem;
+  }
+
+  .Debt-dashboard p {
+    margin: .5em;
+    padding-bottom: .5em;
+  }
+
+  .Debt-dashboard h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: .5em;
+  }
+
+  .Debt-dashboard Label {
+    margin-top: 0;
+  }
+
+  .Debt-dashboard-separator {
+    width: 100%
+  }
+
+  .Main-button {
+    display: flex;
+    height: 2em;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .AddDue-container h2 {
+    margin-top: 0;
+  }
+
+  .AddDue-user-selection {
+    justify-content: space-evenly;
+  }
+
+  .AddDue-user-item {
+    width: 30%;
+  }
+
+  .AddDue-inputs {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: .5em;
+  }
+
+  .Input-field-amount {
+    height: 3em;
+    width: 90%;
+    margin-right: 0;
+    font-size: 1rem;
+    margin-bottom: .5em;
+  }
+
+  .Input-field-message {
+    margin-top: .5em;
+    height: 2.5em;
+    width: 90%;
+    font-size: 1rem;
+  }
+
+  .Add-btn {
+    margin-top: .5em;
+    margin-bottom: 1em;
+    height: 3em;
+  }
+
+  .Pay-btn {
+    margin-top: 1em;
+    height: 3em;
+  }
+
+  .Error {
+    border: 1px solid rgba(221, 44, 0, 0.87);
+  }
+
+  .Error-message {
+    margin: 0;
+    margin-top: .5em;
+  }
+}

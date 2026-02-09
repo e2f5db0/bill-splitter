@@ -1,0 +1,52 @@
+# events is required, but defaults are ok
+events { }
+
+# A http server, listening at port 80 and 443
+http {
+  server {
+    listen 80;
+    server_name ${DOMAIN_NAME};
+    
+    # ACME challenge location for Let's Encrypt
+    location /.well-known/acme-challenge/ {
+      root /var/www/certbot;
+    }
+
+    # Redirect all other HTTP traffic to HTTPS
+    location / {
+      return 301 https://$host$request_uri;
+    }
+  }
+
+  server {
+    listen 443 ssl http2;
+    server_name ${DOMAIN_NAME};
+    
+    # SSL certificate configuration
+    ssl_certificate /etc/letsencrypt/live/${DOMAIN_NAME}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN_NAME}/privkey.pem;
+    
+    # SSL configuration
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    
+    # Requests starting with root (/) are handled
+    location / {
+      # Requests are directed to http://localhost:80
+      proxy_pass http://template-frontend:80;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Requests starting with /api/ are handled
+    location /api/ {
+      proxy_pass http://template-backend:3001/;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+  }
+}

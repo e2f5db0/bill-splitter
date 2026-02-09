@@ -1,0 +1,36 @@
+{
+  "name": "bill-splitter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon -L index.js",
+    "test": "echo 'No unit tests implemented yet. You can run e2e tests with the command npm run test:e2e'",
+    "eslint": "eslint './**/*.{js,jsx}'",
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run",
+    "setup-password": "node util/setup-password.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "author": "e2f5db0",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.26.0",
+    "axios": "^1.7.9",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.4"
+  },
+  "devDependencies": {
+    "cypress": "^13.17.0",
+    "eslint": "^9.18.0",
+    "nodemon": "^3.1.9"
+  }
+}
