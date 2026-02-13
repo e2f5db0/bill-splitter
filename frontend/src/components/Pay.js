@@ -18,6 +18,8 @@ const Pay = (props) => {
   const [amountToBePayed, setAmountToBePayed] = useState('')
   const [paymentConfirmation, setPaymentConfirmation] = useState(false)
   const [buttonDisabled, setButtonDisabled] = useState(false)
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false)
+  const [messageToDelete, setMessageToDelete] = useState('')
 
   const fetchDebts = useCallback(async () => {
     const config = {
@@ -101,8 +103,47 @@ const Pay = (props) => {
     setShowMessages(false)
   }
 
+  const removeDue = async () => {
+    if (messageToDelete) {
+      setButtonDisabled(true)
+      try {
+        await axios.post(`${baseurl}/debts/remove`, {
+          payer: selected,
+          requester: props.user,
+          message: messageToDelete,
+          token: props.token
+        })
+        handleShowConfirmationDialog()
+        setButtonDisabled(false)
+        props.setView('main')
+      } catch (e) {
+        console.warn(e)
+        setButtonDisabled(false)
+      }
+    }
+  }
+
+  const handleShowConfirmationDialog = () => {
+    setShowConfirmationDialog(!showConfirmationDialog)
+  }
+
+  const handleRemove = (message) => {
+    setMessageToDelete(message)
+    handleShowConfirmationDialog()
+  }
+
   return (
     <div className='Container'>
+      {showConfirmationDialog && <div className='backdrop'>
+        <div className='Dues-confirmation-dialog'>
+          <p>Haluatko varmasti poistaa velan?</p>
+          <p><b>{messageToDelete}</b></p>
+          <div>
+            <input type='button' className='Dues-confirmation-dialog-cancel-button' onClick={() => handleShowConfirmationDialog()} value="Peruuta" />
+            <input type='button' className='Dues-confirmation-dialog-delete-button' disabled={buttonDisabled} onClick={() => removeDue()} value="Poista" />
+          </div>
+        </div>
+      </div>}
       <div className='Payment-container'>
         <h2>Maksa</h2>
         {debts.length > 0 && <div className='Payment-user-selection'>
@@ -113,7 +154,7 @@ const Pay = (props) => {
           {selected && <h2>{totalAmount}€</h2>}
           {!selected && <h2>- €</h2>}
           {showMessages && <div className='Payment-message-list'>
-            {messages.map(message => <p key={message}>{message}</p>)}
+            {messages.map(message => <span key={message} className='Payment-message-list-item'>{message} <input type='button' className='Remove-button' onClick={() => handleRemove(message)} value='Poista' /></span>)}
           </div>}
           {(!showMessages && selected !== '') && <div className='Payment-messages-button' onClick={() => setShowMessages(true)}>
             <p>Näytä viestit</p>
