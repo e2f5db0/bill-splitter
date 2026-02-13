@@ -143,7 +143,7 @@ fi
 
 # Use envsubst to replace ${DOMAIN_NAME} in template
 export DOMAIN_NAME
-envsubst '${DOMAIN_NAME}' < nginx.conf.template > nginx.conf
+envsubst '${DOMAIN_NAME}' < nginx.conf.template > frontend/nginx.conf
 
 echo -e "${GREEN}✓ nginx.conf generated with domain: $DOMAIN_NAME${NC}"
 
