@@ -111,8 +111,8 @@ const Pay = (props) => {
       setButtonDisabled(true)
       try {
         await axios.post(`${baseurl}/debts/remove`, {
-          payer: selected,
-          requester: props.user,
+          payer: props.user,
+          requester: selected,
           message: messageToDelete,
           token: props.token
         })
