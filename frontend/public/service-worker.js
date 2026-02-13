@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 
 // Service Worker for KommuuniApp PWA
-const CACHE_NAME = 'kommuuni-app-v1';
+const CACHE_NAME = 'kommuuni-app-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -61,6 +61,14 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Don't cache API calls - always go to network for fresh data
+  // This ensures database changes are immediately visible
+  if (event.request.url.includes('/api/') || event.request.url.includes('/debts/')) {
+    // Let the request go directly to the network without Service Worker intervention
+    return;
+  }
+
+  // Cache-first strategy for static assets only (HTML, CSS, JS, images)
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
@@ -84,7 +92,7 @@ self.addEventListener('fetch', (event) => {
           // Cache the fetched response for future use
           caches.open(CACHE_NAME)
             .then((cache) => {
-              // Only cache GET requests
+              // Only cache GET requests for static assets
               if (event.request.method === 'GET') {
                 cache.put(event.request, responseToCache);
               }
