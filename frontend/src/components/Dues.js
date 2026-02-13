@@ -15,6 +15,9 @@ const Dues = (props) => {
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false)
   const [messageToDelete, setMessageToDelete] = useState('')
   const [buttonDisabled, setButtonDisabled] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
+  const [removedDebtMessage, setRemovedDebtMessage] = useState('')
+  const [countdown, setCountdown] = useState(10)
 
   useEffect(() => {
     const fetchDebts = async () => {
@@ -59,13 +62,32 @@ const Dues = (props) => {
         })
         handleShowConfirmationDialog()
         setButtonDisabled(false)
-        props.setView('main')
+        // Show notification with the removed debt message
+        setRemovedDebtMessage(messageToDelete)
+        setShowNotification(true)
+        setCountdown(10)
       } catch (e) {
         console.warn(e)
         setButtonDisabled(false)
       }
     }
   }
+
+  // Handle countdown timer and navigation
+  useEffect(() => {
+    let timer
+    if (showNotification && countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown(prev => prev - 1)
+      }, 1000)
+    } else if (showNotification && countdown === 0) {
+      setShowNotification(false)
+      props.setView('main')
+    }
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [showNotification, countdown, props])
 
   const handleShowConfirmationDialog = () => {
     setShowConfirmationDialog(!showConfirmationDialog)
@@ -78,6 +100,23 @@ const Dues = (props) => {
 
   return (
     <div className='Container'>
+      {showNotification && <div className='Notification-container'>
+        <div className='Notification-box'>
+          <div className='Notification-content'>
+            <h3>Velka poistettu</h3>
+            <p>{removedDebtMessage}</p>
+          </div>
+          <div className='Notification-timer'>
+            Sulkeutuu {countdown}s
+          </div>
+          <div className='Notification-progress-bar'>
+            <div 
+              className='Notification-progress-fill' 
+              style={{ width: `${(countdown / 10) * 100}%` }}
+            />
+          </div>
+        </div>
+      </div>}
       {showConfirmationDialog && <div className='backdrop'>
         <div className='Dues-confirmation-dialog'>
           <p>Haluatko varmasti poistaa velan?</p>

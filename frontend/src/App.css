@@ -141,6 +141,81 @@ h3 {
   cursor: pointer;
 }
 
+.Notification-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 2em;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.Notification-box {
+  background-color: #3C415C;
+  border: 2px solid #301B3F;
+  border-radius: 1em;
+  padding: 1.5em;
+  min-width: 300px;
+  max-width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.3s ease-out;
+}
+
+.Notification-content {
+  margin-bottom: 1em;
+}
+
+.Notification-content h3 {
+  color: #B4A5A5;
+  margin: 0 0 0.5em 0;
+  font-size: 1.3rem;
+}
+
+.Notification-content p {
+  color: #B4A5A5;
+  margin: 0;
+  font-size: 1.1rem;
+  word-wrap: break-word;
+}
+
+.Notification-timer {
+  color: #B4A5A5;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.Notification-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #151515;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.Notification-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #301B3F, #3C415C);
+  transition: width 1s linear;
+  border-radius: 4px;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .Debts-title {
   cursor: pointer;
 }
@@ -721,5 +796,23 @@ h3 {
   .Error-message {
     margin: 0;
     margin-top: .5em;
+  }
+
+  .Notification-box {
+    min-width: 250px;
+    max-width: 85%;
+    padding: 1em;
+  }
+
+  .Notification-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .Notification-content p {
+    font-size: 0.95rem;
+  }
+
+  .Notification-timer {
+    font-size: 0.85rem;
   }
 }
