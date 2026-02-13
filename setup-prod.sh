@@ -292,7 +292,7 @@ if [ $PORT_CONFLICTS -gt 0 ]; then
     echo ""
     echo "Options:"
     echo "  1. Stop the conflicting services"
-    echo "  2. Modify docker-compose.yaml to use different ports"
+    echo "  2. Modify docker compose.yaml to use different ports"
     echo "  3. Run 'docker compose down' if old containers are still running"
     echo ""
     read -p "Continue anyway? (y/N) " -n 1 -r
@@ -436,7 +436,7 @@ if docker ps | grep -q "template-frontend"; then
 #!/bin/bash
 
 # Initialize Let's Encrypt certificates
-# This script should be run once before starting the docker-compose services
+# This script should be run once before starting the docker compose services
 
 if ! [ -x "$(command -v docker)" ]; then
   echo 'Error: docker is not installed.' >&2

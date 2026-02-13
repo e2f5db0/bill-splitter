@@ -111,7 +111,7 @@ echo -e "${GREEN}✓ Dependencies installed${NC}"
 # Clean up old containers and volumes if they exist
 echo ""
 echo "Cleaning up old containers (if any)..."
-docker compose -f docker-compose.dev.yaml --env-file ./backend/.env down -v 2>/dev/null || true
+docker compose -f docker compose.dev.yaml --env-file ./backend/.env down -v 2>/dev/null || true
 
 # Remove old mongo data for fresh start (optional - commented out by default)
 # echo "Removing old database data..."
@@ -123,7 +123,7 @@ echo "Building and starting Docker containers..."
 echo "This may take a few minutes on first run..."
 echo ""
 
-docker compose -f docker-compose.dev.yaml --env-file ./backend/.env up --build -d
+docker compose -f docker compose.dev.yaml --env-file ./backend/.env up --build -d
 
 # Wait for containers to be healthy
 echo ""
@@ -144,13 +144,13 @@ if docker ps | grep -q "template-frontend-dev"; then
     echo "  • MongoDB:         localhost:3456"
     echo ""
     echo "To view logs:"
-    echo "  docker compose -f docker-compose.dev.yaml logs -f"
+    echo "  docker compose -f docker compose.dev.yaml logs -f"
     echo ""
     echo "To stop the environment:"
-    echo "  docker compose -f docker-compose.dev.yaml down"
+    echo "  docker compose -f docker compose.dev.yaml down"
     echo ""
 else
     echo -e "${RED}Error: Containers failed to start${NC}"
-    echo "Check logs with: docker compose -f docker-compose.dev.yaml logs"
+    echo "Check logs with: docker compose -f docker compose.dev.yaml logs"
     exit 1
 fi

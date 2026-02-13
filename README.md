@@ -144,7 +144,7 @@ cd backend && npm install && cd ..
 cd frontend && npm install && cd ..
 
 # Start containers
-docker compose -f docker-compose.dev.yaml --env-file ./backend/.env up --build
+docker compose -f docker compose.dev.yaml --env-file ./backend/.env up --build
 ```
 
 ### Production
@@ -247,7 +247,7 @@ By default nginx searches for files for each path and thi may cause problems for
 Run end-to-end tests (cypress)
 
 ```bash
-> docker-compose --env-file ./backend/.env up # with docker-compose
+> docker compose --env-file ./backend/.env up # with docker compose
 > docker compose --env-file ./backend/.env up # with docker desktop
 > docker compose --env-file ./backend/.env up > /dev/null 2>&1 & # start in background
 # Run in other terminal

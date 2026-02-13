@@ -13,7 +13,7 @@ Before running the setup, ensure:
 
 1. **Ports 80 and 443 are open** on your server and accessible from the internet
 2. **DNS is configured** - domain must point to your server's public IP address
-3. **Docker and docker-compose are installed**
+3. **Docker and docker compose are installed**
 
 ## Initial Setup
 
@@ -61,7 +61,7 @@ Once you've verified everything works with staging certificates:
 ### Step 4: Start all services
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Your application will now be available at:
@@ -84,8 +84,8 @@ The nginx container:
 If you need to manually renew certificates:
 
 ```bash
-docker-compose run --rm certbot renew
-docker-compose exec nginx nginx -s reload
+docker compose run --rm certbot renew
+docker compose exec nginx nginx -s reload
 ```
 
 ## Troubleshooting
@@ -104,8 +104,8 @@ docker-compose exec nginx nginx -s reload
 
 3. **Check logs:**
    ```bash
-   docker-compose logs certbot
-   docker-compose logs nginx
+   docker compose logs certbot
+   docker compose logs nginx
    ```
 
 ### Rate limit errors
@@ -119,8 +119,8 @@ If you hit Let's Encrypt rate limits:
 
 Force a renewal:
 ```bash
-docker-compose run --rm certbot renew --force-renewal
-docker-compose exec nginx nginx -s reload
+docker compose run --rm certbot renew --force-renewal
+docker compose exec nginx nginx -s reload
 ```
 
 ## File Structure
@@ -139,7 +139,7 @@ bill-splitter/
 │   └── logs/                   # Certbot logs
 ├── init-letsencrypt.sh         # Initial setup script
 ├── nginx.conf                  # Nginx config with SSL
-└── docker-compose.yaml         # Includes certbot service
+└── docker compose.yaml         # Includes certbot service
 ```
 
 ## Security Notes

@@ -144,7 +144,7 @@ WARN[0000] The "HE4tLrwdMBwXa3DsKOPDOuIGTi6eRPNx7" variable is not set. Defaulti
 
 **Why this happens:**
 - Docker Compose scans the `.env` file and warns about any `$` characters it finds
-- However, `LOGIN_PASSWORD_HASH` is not referenced in `docker-compose.yaml`
+- However, `LOGIN_PASSWORD_HASH` is not referenced in `docker compose.yaml`
 - The backend container reads the hash directly from the `.env` file using `dotenv`
 - The hash is processed correctly by the application
 
