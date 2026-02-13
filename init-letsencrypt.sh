@@ -3,7 +3,7 @@
 # Initialize Let's Encrypt certificates for custom domain
 # This script should be run once before starting the docker compose services
 
-if ! [ -x "$(command -v docker compose)" ]; then
+if ! docker compose version > /dev/null 2>&1; then
   echo 'Error: docker compose is not installed.' >&2
   exit 1
 fi
