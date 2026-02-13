@@ -76,5 +76,26 @@ docker-compose run --rm --entrypoint "\
     --force-renewal" certbot
 echo
 
+echo "### Regenerating nginx.conf with HTTPS configuration ..."
+# Load DOMAIN_NAME from .env if available
+if [ -f "./backend/.env" ]; then
+  source ./backend/.env
+fi
+
+# Use the domain from the script if DOMAIN_NAME is not set
+if [ -z "$DOMAIN_NAME" ]; then
+  DOMAIN_NAME="${domains[0]}"
+fi
+
+# Generate HTTPS-enabled nginx.conf
+if [ -f "./nginx.conf.template" ]; then
+  export DOMAIN_NAME
+  envsubst '${DOMAIN_NAME}' < nginx.conf.template > nginx.conf
+  echo "✓ nginx.conf regenerated with HTTPS support"
+else
+  echo "Warning: nginx.conf.template not found, skipping nginx.conf regeneration"
+fi
+echo
+
 echo "### Reloading nginx ..."
 docker-compose exec nginx nginx -s reload

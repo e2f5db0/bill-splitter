@@ -136,16 +136,28 @@ echo -e "${GREEN}✓ DOMAIN_NAME is set: $DOMAIN_NAME${NC}"
 
 # Generate nginx.conf from template
 echo "Generating nginx.conf from template..."
-if [ ! -f "./nginx.conf.template" ]; then
-    echo -e "${RED}Error: nginx.conf.template not found!${NC}"
-    exit 1
+
+# Check if SSL certificates already exist
+if [ -d "./certbot/conf/live/$DOMAIN_NAME" ] && [ -f "./certbot/conf/live/$DOMAIN_NAME/fullchain.pem" ]; then
+    echo "SSL certificates found, using HTTPS configuration..."
+    if [ ! -f "./nginx.conf.template" ]; then
+        echo -e "${RED}Error: nginx.conf.template not found!${NC}"
+        exit 1
+    fi
+    export DOMAIN_NAME
+    envsubst '${DOMAIN_NAME}' < nginx.conf.template > nginx.conf
+    echo -e "${GREEN}✓ nginx.conf generated with HTTPS support${NC}"
+else
+    echo "No SSL certificates found, using HTTP-only configuration..."
+    if [ ! -f "./nginx.conf.http-only.template" ]; then
+        echo -e "${RED}Error: nginx.conf.http-only.template not found!${NC}"
+        exit 1
+    fi
+    export DOMAIN_NAME
+    envsubst '${DOMAIN_NAME}' < nginx.conf.http-only.template > nginx.conf
+    echo -e "${GREEN}✓ nginx.conf generated with HTTP-only (domain: $DOMAIN_NAME)${NC}"
+    echo -e "${YELLOW}Note: To enable HTTPS, run init-letsencrypt.sh after setup${NC}"
 fi
-
-# Use envsubst to replace ${DOMAIN_NAME} in template
-export DOMAIN_NAME
-envsubst '${DOMAIN_NAME}' < nginx.conf.template > frontend/nginx.conf
-
-echo -e "${GREEN}✓ nginx.conf generated with domain: $DOMAIN_NAME${NC}"
 
 if [ "$MONGO_ENV" != "production" ]; then
     echo -e "${YELLOW}Warning: MONGO_ENV is not set to 'production' in .env${NC}"

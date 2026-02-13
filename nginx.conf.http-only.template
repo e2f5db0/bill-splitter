@@ -1,0 +1,34 @@
+# events is required, but defaults are ok
+events { }
+
+# A http server, listening at port 80
+http {
+  server {
+    listen 80;
+    server_name ${DOMAIN_NAME};
+    
+    # ACME challenge location for Let's Encrypt
+    location /.well-known/acme-challenge/ {
+      root /var/www/certbot;
+    }
+
+    # Requests starting with root (/) are handled
+    location / {
+      # Requests are directed to the frontend container
+      proxy_pass http://template-frontend:80;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Requests starting with /api/ are handled
+    location /api/ {
+      proxy_pass http://template-backend:3001/;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+    }
+  }
+}
