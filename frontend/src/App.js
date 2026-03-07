@@ -36,18 +36,27 @@ const App = () => {
         console.log('Error code:', error.code)
         console.log('Error message:', error.message)
         console.log('Error response:', error.response)
+        console.log('Error response status:', error.response?.status)
         
         // Check if error is network-related (backend unreachable)
-        const isNetworkError =
-          !error.response || // No response from server
-          error.code === 'ERR_NETWORK' || // Network error
-          error.code === 'ECONNREFUSED' || // Connection refused
-          error.message === 'Network Error' || // Generic network error
-          (error.response && error.response.status >= 500) // Server error
+        const hasNoResponse = !error.response
+        const isNetworkErrorCode = error.code === 'ERR_NETWORK' || error.code === 'ECONNREFUSED'
+        const isNetworkErrorMessage = error.message === 'Network Error'
+        const isServerError = error.response && error.response.status >= 500
+        
+        console.log('hasNoResponse:', hasNoResponse)
+        console.log('isNetworkErrorCode:', isNetworkErrorCode)
+        console.log('isNetworkErrorMessage:', isNetworkErrorMessage)
+        console.log('isServerError:', isServerError)
+        
+        const isNetworkError = hasNoResponse || isNetworkErrorCode || isNetworkErrorMessage || isServerError
 
+        console.log('Final isNetworkError:', isNetworkError)
+        
         if (isNetworkError) {
-          console.log('Network error detected! Marking backend offline')
+          console.log('Network error detected! Calling markBackendOffline...')
           markBackendOffline(error)
+          console.log('markBackendOffline called')
         } else {
           console.log('Non-network error, backend still considered online')
         }
