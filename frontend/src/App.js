@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import Login from './components/Login'
@@ -8,13 +8,22 @@ import AddDues from './components/AddDues'
 import Pay from './components/Pay'
 import Navbar from './components/Navbar'
 import Dues from './components/Dues'
+import BackendWarning from './components/BackendWarning'
+import { useBackendStatus } from './contexts/BackendStatusContext'
+import { setBackendStatusContext } from './index'
 
 const App = () => {
+  const backendStatus = useBackendStatus()
 
   const [user, setUser] = useState(localStorage.getItem('user'))
   const [token, setToken] = useState(localStorage.getItem('token'))
 
   const navigate = useNavigate()
+
+  // Connect the backend status context to axios interceptor
+  useEffect(() => {
+    setBackendStatusContext(backendStatus)
+  }, [backendStatus])
 
   const setView = (view) => {
     navigate(`/${view}`)
@@ -36,6 +45,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <BackendWarning />
       <Navbar setView={setView} />
       <Routes>
         <Route path='/' element={token ? views['main'] : views['login']} />

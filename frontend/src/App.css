@@ -4,6 +4,63 @@ html {
   background-color: #151515;
 }
 
+/* Backend Warning Banner */
+.Backend-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
+  color: white;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.3s ease-out;
+}
+
+.Backend-warning-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em 2em;
+  gap: 0.8em;
+}
+
+.Backend-warning-icon {
+  font-size: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+.Backend-warning-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 1220px) {
+  .Backend-warning-content {
+    padding: 0.8em 1em;
+  }
+
+  .Backend-warning-icon {
+    font-size: 1.2rem;
+  }
+
+  .Backend-warning-text {
+    font-size: 0.95rem;
+  }
+}
+
 @font-face {
   src: url('./fonts/Roboto-Light.ttf');
   font-family: Roboto;
