@@ -25,17 +25,23 @@ const Pay = (props) => {
   const [countdown, setCountdown] = useState(10)
 
   const fetchDebts = useCallback(async () => {
-    const config = {
-      headers: { Authorization: `Bearer ${props.token}` }
-    }
-    const res = await axios.get(`${baseurl}/debts/${props.user}`, config)
-    setDebts(res.data)
-    // preselect if there is only one requester
-    if (res.data.length === 1) {
-      const debt = res.data[0]
-      setSelected(debt.requester)
-      setTotalAmount(debt.totalAmount)
-      setMessages(debt.messages)
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${props.token}` }
+      }
+      const res = await axios.get(`${baseurl}/debts/${props.user}`, config)
+      setDebts(res.data)
+      // preselect if there is only one requester
+      if (res.data.length === 1) {
+        const debt = res.data[0]
+        setSelected(debt.requester)
+        setTotalAmount(debt.totalAmount)
+        setMessages(debt.messages)
+      }
+    } catch (error) {
+      console.error('Failed to fetch debts:', error)
+      // Error will be handled by axios interceptor
+      setDebts([])
     }
   }, [baseurl, props.user, props.token])
 

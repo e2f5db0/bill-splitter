@@ -11,18 +11,30 @@ const Main = (props) => {
 
   useEffect(() => {
     async function fetchDebts() {
-      const config = {
-        headers: { Authorization: `Bearer ${props.token}` }
+      try {
+        const config = {
+          headers: { Authorization: `Bearer ${props.token}` }
+        }
+        const res = await axios.get(`${baseurl}/debts/${props.user}`, config)
+        setUserDebts(res.data)
+      } catch (error) {
+        console.error('Failed to fetch debts:', error)
+        // Error will be handled by axios interceptor
+        setUserDebts([])
       }
-      const res = await axios.get(`${baseurl}/debts/${props.user}`, config)
-      setUserDebts(res.data)
     }
     async function fetchDues() {
-      const config = {
-        headers: { Authorization: `Bearer ${props.token}` }
+      try {
+        const config = {
+          headers: { Authorization: `Bearer ${props.token}` }
+        }
+        const res = await axios.get(`${baseurl}/debts/dues/${props.user}`, config)
+        setUserDues(res.data)
+      } catch (error) {
+        console.error('Failed to fetch dues:', error)
+        // Error will be handled by axios interceptor
+        setUserDues([])
       }
-      const res = await axios.get(`${baseurl}/debts/dues/${props.user}`, config)
-      setUserDues(res.data)
     }
     fetchDebts()
     fetchDues()
