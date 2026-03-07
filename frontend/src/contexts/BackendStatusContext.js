@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from 'react'
+import React, { createContext, useState, useContext, useEffect } from 'react'
+import { registerBackendStatusCallbacks } from '../setupAxiosInterceptor'
 
 const BackendStatusContext = createContext()
 
@@ -25,6 +26,12 @@ export const BackendStatusProvider = ({ children }) => {
     setIsBackendOnline(true)
     setLastError(null)
   }
+
+  // Register callbacks with the axios interceptor on mount
+  useEffect(() => {
+    console.log('BackendStatusContext: Registering callbacks with axios interceptor')
+    registerBackendStatusCallbacks(markBackendOffline, markBackendOnline)
+  }, [])
 
   return (
     <BackendStatusContext.Provider
