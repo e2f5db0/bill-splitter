@@ -10,20 +10,58 @@ import Navbar from './components/Navbar'
 import Dues from './components/Dues'
 import BackendWarning from './components/BackendWarning'
 import { useBackendStatus } from './contexts/BackendStatusContext'
-import { setBackendStatusContext } from './index'
+import axios from 'axios'
 
 const App = () => {
-  const backendStatus = useBackendStatus()
+  const { markBackendOffline, markBackendOnline } = useBackendStatus()
 
   const [user, setUser] = useState(localStorage.getItem('user'))
   const [token, setToken] = useState(localStorage.getItem('token'))
 
   const navigate = useNavigate()
 
-  // Connect the backend status context to axios interceptor
+  // Setup axios interceptor to detect backend connectivity issues
   useEffect(() => {
-    setBackendStatusContext(backendStatus)
-  }, [backendStatus])
+    console.log('Setting up axios interceptor...')
+    
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => {
+        // On successful response, mark backend as online
+        console.log('Axios: Successful response, marking backend online')
+        markBackendOnline()
+        return response
+      },
+      (error) => {
+        console.log('Axios: Error caught by interceptor', error)
+        console.log('Error code:', error.code)
+        console.log('Error message:', error.message)
+        console.log('Error response:', error.response)
+        
+        // Check if error is network-related (backend unreachable)
+        const isNetworkError =
+          !error.response || // No response from server
+          error.code === 'ERR_NETWORK' || // Network error
+          error.code === 'ECONNREFUSED' || // Connection refused
+          error.message === 'Network Error' || // Generic network error
+          (error.response && error.response.status >= 500) // Server error
+
+        if (isNetworkError) {
+          console.log('Network error detected! Marking backend offline')
+          markBackendOffline(error)
+        } else {
+          console.log('Non-network error, backend still considered online')
+        }
+
+        return Promise.reject(error)
+      }
+    )
+
+    // Cleanup: Remove interceptor when component unmounts
+    return () => {
+      console.log('Removing axios interceptor')
+      axios.interceptors.response.eject(responseInterceptor)
+    }
+  }, [markBackendOffline, markBackendOnline])
 
   const setView = (view) => {
     navigate(`/${view}`)

@@ -15,11 +15,13 @@ export const BackendStatusProvider = ({ children }) => {
   const [lastError, setLastError] = useState(null)
 
   const markBackendOffline = (error) => {
+    console.log('BackendStatusContext: markBackendOffline called', error)
     setIsBackendOnline(false)
     setLastError(error)
   }
 
   const markBackendOnline = () => {
+    console.log('BackendStatusContext: markBackendOnline called')
     setIsBackendOnline(true)
     setLastError(null)
   }
