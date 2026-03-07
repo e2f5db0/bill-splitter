@@ -21,23 +21,17 @@ const Dues = (props) => {
 
   useEffect(() => {
     const fetchDebts = async () => {
-      try {
-        const config = {
-          headers: { Authorization: `Bearer ${props.token}` }
-        }
-        const res = await axios.get(`${baseurl}/debts/dues/${props.user}`, config)
-        setDebts(res.data)
-        // preselect if there is only one payer
-        if (res.data.length === 1) {
-          const debt = res.data[0]
-          setSelected(debt.payer)
-          setTotalAmount(debt.totalAmount)
-          setMessages(debt.messages)
-        }
-      } catch (error) {
-        console.error('Failed to fetch dues:', error)
-        // Error will be handled by axios interceptor
-        setDebts([])
+      const config = {
+        headers: { Authorization: `Bearer ${props.token}` }
+      }
+      const res = await axios.get(`${baseurl}/debts/dues/${props.user}`, config)
+      setDebts(res.data)
+      // preselect if there is only one payer
+      if (res.data.length === 1) {
+        const debt = res.data[0]
+        setSelected(debt.payer)
+        setTotalAmount(debt.totalAmount)
+        setMessages(debt.messages)
       }
     }
     fetchDebts()

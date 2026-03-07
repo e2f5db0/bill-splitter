@@ -4,8 +4,6 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 import { BrowserRouter } from 'react-router-dom'
 import { BackendStatusProvider } from './contexts/BackendStatusContext'
-// Import axios interceptor setup BEFORE any components that might use axios
-import './setupAxiosInterceptor'
 
 // Backend URL is set dynamically at runtime
 // Priority: runtime config (window.ENV) > build-time env var > development default

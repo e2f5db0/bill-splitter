@@ -19,7 +19,7 @@ const BackendWarning = () => {
       <div className='Backend-warning-content'>
         <span className='Backend-warning-icon'>⚠️</span>
         <span className='Backend-warning-text'>
-          Backend server is offline.
+          Backend server is unreachable.
         </span>
       </div>
     </div>

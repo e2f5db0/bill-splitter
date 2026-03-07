@@ -20,17 +20,11 @@ const AddDues = (props) => {
 
   useEffect(() => {
     async function fetchUsers() {
-      try {
-        const config = {
-          headers: { Authorization: `Bearer ${props.token}` }
-        }
-        const res = await axios.get(`${baseurl}/users`, config)
-        setUsers(res.data)
-      } catch (error) {
-        console.error('Failed to fetch users:', error)
-        // Error will be handled by axios interceptor
-        setUsers([])
+      const config = {
+        headers: { Authorization: `Bearer ${props.token}` }
       }
+      const res = await axios.get(`${baseurl}/users`, config)
+      setUsers(res.data)
     }
     fetchUsers()
     // preselect current user
