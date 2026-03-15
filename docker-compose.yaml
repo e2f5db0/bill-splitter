@@ -13,6 +13,7 @@ services:
     depends_on:
       - template-mongo
     container_name: template-backend
+    restart: on-failure
   template-mongo:
     image: mongo:4.4.17
     ports: [
